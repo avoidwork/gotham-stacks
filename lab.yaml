@@ -1,0 +1,1176 @@
+# ==============================================================
+# lab-stack: consolidated manifests (organized)
+#
+# Order:
+#   1) Namespace
+#   2) Storage (PVCs)
+#   3) Datastores (DB/Cache)
+#   4) Platform apps
+#   5) Monitoring
+#   6) Utilities / exporters
+# ==============================================================
+
+# --------------------------------------------------------------
+# 1) Namespace
+# --------------------------------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab-stack
+
+---
+# --------------------------------------------------------------
+# 2) Storage (PVCs)
+# --------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: npm-data-rwx
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: npm-letsencrypt-rwx
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data-rwx
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+# --------------------------------------------------------------
+# 3) Datastores (DB/Cache)
+# --------------------------------------------------------------
+
+# ---------------------------
+# MySQL
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: lab-stack
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: mysql
+          image: mysql:9.6.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-data-rwx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: lab-stack
+spec:
+  selector:
+    app: mysql
+  type: NodePort
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 31306
+
+---
+# ---------------------------
+# Redis
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: lab-stack
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+      volumes:
+        - name: redis-data
+          hostPath:
+            path: /mnt/docker/redis
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: lab-stack
+spec:
+  selector:
+    app: redis
+  type: NodePort
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+      nodePort: 31379
+
+---
+# ---------------------------
+# MongoDB (3-node replica set)
+# ---------------------------
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: lab-stack
+  labels:
+    app: mongodb
+spec:
+  serviceName: mongodb-headless
+  replicas: 3
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: mongodb
+          image: mongodb/mongodb-community-server:7.0-ubi9
+          command: ["mongod"]
+          args:
+            - "--dbpath=/data/db"
+            - "--bind_ip_all"
+            - "--replSet=rs0"
+            - "--logpath=/proc/1/fd/1"
+            - "--logappend"
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "admin"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: microk8s-hostpath
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-headless
+  namespace: lab-stack
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: lab-stack
+spec:
+  selector:
+    app: mongodb
+  type: NodePort
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+      nodePort: 31217
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-rs-init
+  namespace: lab-stack
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: mongodb/mongodb-community-server:7.0-ubi9
+          command: ["/bin/bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for mongodb-0 to accept connections..."
+              until mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
+                --eval "db.adminCommand({ping:1})" >/dev/null 2>&1; do
+                sleep 2
+              done
+
+              echo "Checking replica set status..."
+              if mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
+                --quiet --eval "rs.status().ok" >/dev/null 2>&1; then
+                echo "Replica set already initialized."
+                exit 0
+              fi
+
+              echo "Initializing replica set..."
+              mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
+                --eval '
+                  rs.initiate({
+                    _id: "rs0",
+                    members: [
+                      { _id: 0, host: "mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017" },
+                      { _id: 1, host: "mongodb-1.mongodb-headless.lab-stack.svc.cluster.local:27017" },
+                      { _id: 2, host: "mongodb-2.mongodb-headless.lab-stack.svc.cluster.local:27017" }
+                    ]
+                  })
+                '
+
+              echo "Done."
+          env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: MONGO_INITDB_ROOT_PASSWORD
+
+---
+# --------------------------------------------------------------
+# 4) Platform apps
+# --------------------------------------------------------------
+
+# ---------------------------
+# nginx
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: lab-stack
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: conf
+              mountPath: /etc/nginx/conf.d
+            - name: wwwroot
+              mountPath: /usr/share/nginx
+      volumes:
+        - name: conf
+          hostPath:
+            path: /mnt/docker/nginx/conf.d
+            type: Directory
+        - name: wwwroot
+          hostPath:
+            path: /mnt/docker/nginx/wwwroot
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: lab-stack
+spec:
+  selector:
+    app: nginx
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31080
+
+---
+# ---------------------------
+# SearXNG
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: searxng
+  namespace: lab-stack
+  labels:
+    app: searxng
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: searxng
+  template:
+    metadata:
+      labels:
+        app: searxng
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: searxng
+          image: searxng/searxng:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+            - name: CONFIG_PATH
+              value: "/etc/searxng"
+            - name: DATA_PATH
+              value: "/var/cache/searxng"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/searxng
+            - name: data
+              mountPath: /var/cache/searxng
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/searxng/config
+            type: Directory
+        - name: data
+          hostPath:
+            path: /mnt/docker/searxng/data
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: searxng
+  namespace: lab-stack
+spec:
+  selector:
+    app: searxng
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 31081
+
+---
+# ---------------------------
+# Open WebUI
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-webui
+  namespace: lab-stack
+  labels:
+    app: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-webui
+  template:
+    metadata:
+      labels:
+        app: open-webui
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: open-webui
+          image: ghcr.io/open-webui/open-webui:main
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: open-webui-data
+              mountPath: /app/backend/data
+      volumes:
+        - name: open-webui-data
+          hostPath:
+            path: /mnt/docker/open-webui
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-webui
+  namespace: lab-stack
+spec:
+  selector:
+    app: open-webui
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 31082
+
+---
+# ---------------------------
+# n8n
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: lab-stack
+  labels:
+    app: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: n8n
+          image: docker.n8n.io/n8nio/n8n:latest
+          ports:
+            - containerPort: 5678
+          env:
+            - name: NODES_EXCLUDE
+              value: "[]"
+            - name: N8N_RESTRICT_FILE_ACCESS_TO
+              value: "/mnt/translate"
+            - name: GENERIC_TIMEZONE
+              value: "America/Toronto"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: n8n-data
+              mountPath: /home/node/.n8n
+            - name: translate
+              mountPath: /mnt/translate
+      volumes:
+        - name: n8n-data
+          hostPath:
+            path: /mnt/docker/n8n
+            type: Directory
+        - name: translate
+          hostPath:
+            path: /mnt/translate
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n
+  namespace: lab-stack
+spec:
+  selector:
+    app: n8n
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 5678
+      targetPort: 5678
+      nodePort: 31678
+
+---
+# ---------------------------
+# TeamCity
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teamcity
+  namespace: lab-stack
+  labels:
+    app: teamcity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teamcity
+  template:
+    metadata:
+      labels:
+        app: teamcity
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: teamcity
+          image: jetbrains/teamcity-server:latest
+          ports:
+            - containerPort: 8111
+          env:
+            - name: TEAMCITY_ENV
+              value: "container"
+            - name: TZ
+              value: "America/Toronto"
+            - name: TEAMCITY_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: teamcity
+                  key: TEAMCITY_DB_PASSWORD
+            - name: TEAMCITY_DB_URL
+              value: "jdbc:mysql://mysql:3306/teamcity"
+            - name: TEAMCITY_DB_USER
+              value: "teamcity"
+          volumeMounts:
+            - name: logs
+              mountPath: /opt/teamcity/logs
+            - name: temp
+              mountPath: /opt/teamcity/temp
+            - name: data
+              mountPath: /data/teamcity_server/datadir
+      volumes:
+        - name: logs
+          hostPath:
+            path: /mnt/docker/teamcity/logs
+            type: Directory
+        - name: temp
+          hostPath:
+            path: /mnt/docker/teamcity/temp
+            type: Directory
+        - name: data
+          hostPath:
+            path: /mnt/docker/teamcity/data
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teamcity
+  namespace: lab-stack
+spec:
+  selector:
+    app: teamcity
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8111
+      targetPort: 8111
+      nodePort: 31111
+
+---
+# ---------------------------
+# Nginx Proxy Manager (StatefulSet + Services + PVCs already above)
+# ---------------------------
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-proxy-manager
+  namespace: lab-stack
+  labels:
+    app: nginx-proxy-manager
+spec:
+  serviceName: nginx-proxy-manager
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy-manager
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy-manager
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: nginx-proxy-manager
+          image: jc21/nginx-proxy-manager:latest
+          ports:
+            - containerPort: 80
+            - containerPort: 81
+            - containerPort: 443
+          securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              add: ["NET_BIND_SERVICE"]
+          env:
+            - name: TZ
+              value: "America/Toronto"
+            - name: SKIP_FILE_OWNERSHIP
+              value: "1"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: letsencrypt
+              mountPath: /etc/letsencrypt
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: npm-data-rwx
+        - name: letsencrypt
+          persistentVolumeClaim:
+            claimName: npm-letsencrypt-rwx
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy-manager
+  namespace: lab-stack
+spec:
+  selector:
+    app: nginx-proxy-manager
+  type: NodePort
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31880
+    - name: admin
+      protocol: TCP
+      port: 81
+      targetPort: 81
+      nodePort: 31881
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+      nodePort: 31882
+
+---
+# --------------------------------------------------------------
+# 5) Monitoring
+# --------------------------------------------------------------
+
+# ---------------------------
+# Grafana
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: lab-stack
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+            - name: GF_PLUGINS_PREINSTALL
+              value: "grafana-clock-panel, grafana-simple-json-datasource"
+          volumeMounts:
+            - name: grafana-data
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-data
+          hostPath:
+            path: /mnt/docker/grafana
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: lab-stack
+spec:
+  selector:
+    app: grafana
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 31083
+
+---
+# ---------------------------
+# InfluxDB
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  namespace: lab-stack
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: influxdb
+          image: influxdb:2
+          ports:
+            - containerPort: 8086
+          env:
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              value: "jason"
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: influxdb
+                  key: DOCKER_INFLUXDB_INIT_PASSWORD
+            - name: DOCKER_INFLUXDB_INIT_ORG
+              value: "proxmox"
+            - name: DOCKER_INFLUXDB_INIT_BUCKET
+              value: "proxmox"
+            - name: DOCKER_INFLUXDB_INIT_MODE
+              value: "setup"
+          volumeMounts:
+            - name: influxdb-config
+              mountPath: /etc/influxdb2
+            - name: influxdb-data
+              mountPath: /var/lib/influxdb2
+      volumes:
+        - name: influxdb-config
+          hostPath:
+            path: /mnt/docker/influxdb/config
+            type: Directory
+        - name: influxdb-data
+          hostPath:
+            path: /mnt/docker/influxdb/data
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  namespace: lab-stack
+spec:
+  selector:
+    app: influxdb
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086
+      nodePort: 31086
+
+---
+# ---------------------------
+# Prometheus
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: lab-stack
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: prometheus
+          image: prom/prometheus:latest
+          ports:
+            - containerPort: 9090
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/prometheus/config
+            type: Directory
+        - name: data
+          hostPath:
+            path: /mnt/docker/prometheus/data
+            type: Directory
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: lab-stack
+spec:
+  selector:
+    app: prometheus
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      nodePort: 31090
+
+---
+# --------------------------------------------------------------
+# 6) Utilities / exporters
+# --------------------------------------------------------------
+
+# ---------------------------
+# Pi-hole exporter 1
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-exporter-1
+  namespace: lab-stack
+  labels:
+    app: pihole-exporter-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole-exporter-1
+  template:
+    metadata:
+      labels:
+        app: pihole-exporter-1
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: pihole-exporter-1
+          image: ekofr/pihole-exporter:latest
+          ports:
+            - containerPort: 9617
+          env:
+            - name: PIHOLE_HOSTNAME
+              value: "10.1.2.2"
+            - name: PIHOLE_PASSWORD
+              value: ""
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-exporter-1
+  namespace: lab-stack
+spec:
+  selector:
+    app: pihole-exporter-1
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9617
+      targetPort: 9617
+      nodePort: 31100
+
+---
+# ---------------------------
+# Pi-hole exporter 2
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole-exporter-2
+  namespace: lab-stack
+  labels:
+    app: pihole-exporter-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole-exporter-2
+  template:
+    metadata:
+      labels:
+        app: pihole-exporter-2
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: pihole-exporter-2
+          image: ekofr/pihole-exporter:latest
+          ports:
+            - containerPort: 9617
+          env:
+            - name: PIHOLE_HOSTNAME
+              value: "10.1.2.3"
+            - name: PIHOLE_PASSWORD
+              value: ""
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-exporter-2
+  namespace: lab-stack
+spec:
+  selector:
+    app: pihole-exporter-2
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9617
+      targetPort: 9617
+      nodePort: 31101

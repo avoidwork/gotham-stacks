@@ -1,0 +1,471 @@
+# --------------------------------------------------------------
+# Media Stack (Kubernetes manifests)
+# Organized as: Namespace → Deployments → Services
+# Common DNS config is kept consistent across pods.
+# --------------------------------------------------------------
+
+# --------------------------------------------------------------
+# 1️⃣ Namespace – all objects live here
+# --------------------------------------------------------------
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: media-stack
+---
+# --------------------------------------------------------------
+# 2️⃣ Deployments (one per service)
+# --------------------------------------------------------------
+
+# ------------------- Prowlarr -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+  namespace: media-stack
+  labels:
+    app: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: prowlarr
+          image: linuxserver/prowlarr:latest
+          ports:
+            - containerPort: 9696
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/prowlarr
+            type: Directory
+---
+# ------------------- Lidarr -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+  namespace: media-stack
+  labels:
+    app: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  template:
+    metadata:
+      labels:
+        app: lidarr
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: lidarr
+          image: linuxserver/lidarr:latest
+          ports:
+            - containerPort: 8686
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+            - name: music
+              mountPath: /music
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/lidarr
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /mnt/downloads
+            type: Directory
+        - name: music
+          hostPath:
+            path: /mnt/music
+            type: Directory
+---
+# ------------------- Radarr -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: media-stack
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: radarr
+          image: linuxserver/radarr:latest
+          ports:
+            - containerPort: 7878
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+            - name: movies
+              mountPath: /movies
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/radarr
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /mnt/downloads
+            type: Directory
+        - name: movies
+          hostPath:
+            path: /mnt/movies
+            type: Directory
+---
+# ------------------- Sabnzbd -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: media-stack
+  labels:
+    app: sabnzbd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabnzbd
+  template:
+    metadata:
+      labels:
+        app: sabnzbd
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: sabnzbd
+          image: linuxserver/sabnzbd:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/sabnzbd
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /mnt/downloads
+            type: Directory
+---
+# ------------------- Sonarr -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: media-stack
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: sonarr
+          image: linuxserver/sonarr:latest
+          ports:
+            - containerPort: 8989
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+            - name: tv
+              mountPath: /tv
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/sonarr
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /mnt/downloads
+            type: Directory
+        - name: tv
+          hostPath:
+            path: /mnt/tv
+            type: Directory
+---
+# ------------------- Transmission -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+  namespace: media-stack
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - media-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: transmission
+          image: linuxserver/transmission:latest
+          ports:
+            - containerPort: 9091
+            - containerPort: 51413
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+      volumes:
+        - name: config
+          hostPath:
+            path: /mnt/docker/transmission
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /mnt/downloads
+            type: Directory
+---
+# --------------------------------------------------------------
+# 3️⃣ Services – expose each app via NodePort
+# --------------------------------------------------------------
+
+# ------------------- Prowlarr Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  namespace: media-stack
+spec:
+  selector:
+    app: prowlarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9696
+      targetPort: 9696
+      nodePort: 30696
+---
+# ------------------- Lidarr Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  namespace: media-stack
+spec:
+  selector:
+    app: lidarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8686
+      targetPort: 8686
+      nodePort: 30686
+---
+# ------------------- Radarr Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: media-stack
+spec:
+  selector:
+    app: radarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 7878
+      targetPort: 7878
+      nodePort: 30778
+---
+# ------------------- Sabnzbd Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: sabnzbd
+  namespace: media-stack
+spec:
+  selector:
+    app: sabnzbd
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+---
+# ------------------- Sonarr Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: media-stack
+spec:
+  selector:
+    app: sonarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8989
+      targetPort: 8989
+      nodePort: 30898
+---
+# ------------------- Transmission Service -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+  namespace: media-stack
+spec:
+  selector:
+    app: transmission
+  type: NodePort
+  ports:
+    - name: web
+      protocol: TCP
+      port: 9091
+      targetPort: 9091
+      nodePort: 30091
+    - name: peer-tcp
+      protocol: TCP
+      port: 51413
+      targetPort: 51413
+      nodePort: 30513
+    - name: peer-udp
+      protocol: UDP
+      port: 51413
+      targetPort: 51413
+      nodePort: 30514
