@@ -1,6 +1,6 @@
 # --------------------------------------------------------------
 # Media Stack (Kubernetes manifests)
-# Organized as: Namespace → Deployments → Services
+# Organized as: Namespace → (Deployment + Service) per app
 # Common DNS config is kept consistent across pods.
 # --------------------------------------------------------------
 
@@ -13,7 +13,7 @@ metadata:
   name: media-stack
 ---
 # --------------------------------------------------------------
-# 2️⃣ Deployments (one per service)
+# 2️⃣ Apps (Deployment followed by its Service)
 # --------------------------------------------------------------
 
 # ------------------- Prowlarr -------------------
@@ -64,6 +64,21 @@ spec:
           hostPath:
             path: /mnt/docker/prowlarr
             type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prowlarr
+  namespace: media-stack
+spec:
+  selector:
+    app: prowlarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 9696
+      targetPort: 9696
+      nodePort: 30696
 ---
 # ------------------- Lidarr -------------------
 apiVersion: apps/v1
@@ -126,6 +141,21 @@ spec:
             path: /mnt/music
             type: Directory
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr
+  namespace: media-stack
+spec:
+  selector:
+    app: lidarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8686
+      targetPort: 8686
+      nodePort: 30686
+---
 # ------------------- Radarr -------------------
 apiVersion: apps/v1
 kind: Deployment
@@ -187,6 +217,21 @@ spec:
             path: /mnt/movies
             type: Directory
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: media-stack
+spec:
+  selector:
+    app: radarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 7878
+      targetPort: 7878
+      nodePort: 30778
+---
 # ------------------- Sabnzbd -------------------
 apiVersion: apps/v1
 kind: Deployment
@@ -241,6 +286,21 @@ spec:
           hostPath:
             path: /mnt/downloads
             type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sabnzbd
+  namespace: media-stack
+spec:
+  selector:
+    app: sabnzbd
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
 ---
 # ------------------- Sonarr -------------------
 apiVersion: apps/v1
@@ -303,6 +363,21 @@ spec:
             path: /mnt/tv
             type: Directory
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: media-stack
+spec:
+  selector:
+    app: sonarr
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8989
+      targetPort: 8989
+      nodePort: 30898
+---
 # ------------------- Transmission -------------------
 apiVersion: apps/v1
 kind: Deployment
@@ -359,91 +434,6 @@ spec:
             path: /mnt/downloads
             type: Directory
 ---
-# --------------------------------------------------------------
-# 3️⃣ Services – expose each app via NodePort
-# --------------------------------------------------------------
-
-# ------------------- Prowlarr Service -------------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: prowlarr
-  namespace: media-stack
-spec:
-  selector:
-    app: prowlarr
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 9696
-      targetPort: 9696
-      nodePort: 30696
----
-# ------------------- Lidarr Service -------------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: lidarr
-  namespace: media-stack
-spec:
-  selector:
-    app: lidarr
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 8686
-      targetPort: 8686
-      nodePort: 30686
----
-# ------------------- Radarr Service -------------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: radarr
-  namespace: media-stack
-spec:
-  selector:
-    app: radarr
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 7878
-      targetPort: 7878
-      nodePort: 30778
----
-# ------------------- Sabnzbd Service -------------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: sabnzbd
-  namespace: media-stack
-spec:
-  selector:
-    app: sabnzbd
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-      nodePort: 30080
----
-# ------------------- Sonarr Service -------------------
-apiVersion: v1
-kind: Service
-metadata:
-  name: sonarr
-  namespace: media-stack
-spec:
-  selector:
-    app: sonarr
-  type: NodePort
-  ports:
-    - protocol: TCP
-      port: 8989
-      targetPort: 8989
-      nodePort: 30898
----
-# ------------------- Transmission Service -------------------
 apiVersion: v1
 kind: Service
 metadata:
