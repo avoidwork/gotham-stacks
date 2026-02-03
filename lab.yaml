@@ -229,23 +229,12 @@ spec:
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:7.0-ubi9
-          command: ["mongod"]
           args:
             - "--dbpath=/data/db"
             - "--bind_ip_all"
             - "--replSet=rs0"
-            - "--logpath=/proc/1/fd/1"
-            - "--logappend"
           ports:
             - containerPort: 27017
-          env:
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: "admin"
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb
-                  key: MONGO_INITDB_ROOT_PASSWORD
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
@@ -310,22 +299,18 @@ spec:
             - |
               set -euo pipefail
 
+              MONGO_HOST="mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017"
+              MONGO_URI="mongodb://${MONGO_HOST}/admin?directConnection=true"
+
               echo "Waiting for mongodb-0 to accept connections..."
-              until mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
-                --eval "db.adminCommand({ping:1})" >/dev/null 2>&1; do
+              until mongosh "${MONGO_URI}" --quiet --eval "db.adminCommand({ ping: 1 }).ok" >/dev/null 2>&1; do
                 sleep 2
               done
 
-              echo "Checking replica set status..."
-              if mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
-                --quiet --eval "rs.status().ok" >/dev/null 2>&1; then
-                echo "Replica set already initialized."
-                exit 0
-              fi
-
-              echo "Initializing replica set..."
-              mongosh "mongodb://admin:${MONGO_INITDB_ROOT_PASSWORD}@mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin" \
-                --eval '
+              echo "Checking whether replica set is initialized..."
+              if ! mongosh "${MONGO_URI}" --quiet --eval "rs.status().ok" >/dev/null 2>&1; then
+                echo "Initializing replica set..."
+                mongosh "${MONGO_URI}" --quiet --eval '
                   rs.initiate({
                     _id: "rs0",
                     members: [
@@ -335,6 +320,42 @@ spec:
                     ]
                   })
                 '
+              else
+                echo "Replica set already initialized."
+              fi
+
+              echo "Waiting for PRIMARY..."
+              until mongosh "${MONGO_URI}" --quiet --eval "rs.status().ok" 2>/dev/null | grep -q "1"; do
+                sleep 2
+              done
+
+              echo "Ensuring admin user exists..."
+              
+              PRIMARY_HOST="$(mongosh "${MONGO_URI}" --quiet --eval '
+                const st = rs.status();
+                const p = st.members.find(m => m.stateStr === "PRIMARY");
+                if (!p) { throw new Error("No PRIMARY found yet"); }
+                print(p.name); // e.g. "mongodb-1.mongodb-headless.lab-stack.svc.cluster.local:27017"
+              ')"
+            
+              MONGO_HOST="${PRIMARY_HOST}"
+              MONGO_URI="mongodb://${MONGO_HOST}/admin?directConnection=true"
+              
+              mongosh "${MONGO_URI}" --quiet --eval "
+                const adminDb = db.getSiblingDB('admin');
+                const user = adminDb.getUser('admin');
+                if (user) {
+                  adminDb.updateUser('admin', { pwd: '${MONGO_INITDB_ROOT_PASSWORD}' });
+                  print('Admin user already exists.');
+                } else {
+                  adminDb.createUser({
+                    user: 'admin',
+                    pwd: '${MONGO_INITDB_ROOT_PASSWORD}',
+                    roles: [ { role: 'root', db: 'admin' } ]
+                  });
+                  print('Admin user created.');
+                }
+              "
 
               echo "Done."
           env:
