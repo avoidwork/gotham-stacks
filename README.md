@@ -56,15 +56,25 @@ This stack uses `hostPath` mounts for `/config` and media/download folders. Ensu
 
 ### Apply a stack
 
-`kubectl apply -f lab.yaml kubectl apply -f media.yaml`
+```
+kubectl apply -f lab.yaml
+kubectl apply -f media.yaml
+```
 
 ### Verify resources
 
-`kubectl get ns kubectl -n lab-stack get all kubectl -n media-stack get all`
+```
+kubectl get ns
+kubectl -n lab-stack get all
+kubectl -n media-stack get all
+```
 
 ### Remove a stack
 
-`kubectl delete -f lab.yaml kubectl delete -f media.yaml`
+```
+kubectl delete -f lab.yaml
+kubectl delete -f media.yaml
+```
 
 ## Secrets (required for some services)
 
