@@ -2,30 +2,6 @@
 
 This repo contains **prebuilt Kubernetes manifest bundles** for homelab-style “stacks”. Each file is intended to be applied as-is (a single multi-document YAML) and will create its own Namespace plus the related Deployments/StatefulSets/Services.
 
-## Environment
-
-### Cluster Nodes
-
-#### IPs
-
-- `10.1.2.50`
-- `10.1.2.51`
-- `10.1.2.52`
-
-#### NFS Mounts
-
-- `/mnt/docker`
-- `/mnt/downloads`
-- `/mnt/movies`
-- `/mnt/music`
-- `/mnt/translate`
-- `/mnt/tv`
-
-### DNS (pihole)
-
-- `10.1.2.2`
-- `10.1.2.3`
-
 ## Files
 
 ### `lab.yaml` — **Lab Stack**
@@ -120,3 +96,25 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - **DNS config:** manifests may include explicit DNS settings; change them if your cluster DNS differs.
 - **Nginx Proxy Manager:** Proxies must be pointed at a cluster IP due to a DNS issue in the nginx instance in the pod.
 - **TeamCity:** Installation requires accessing the server log to retrieve the token required to complete the installation from the web interface.
+
+### Cluster Nodes
+
+#### IPs
+
+- `10.1.2.50`
+- `10.1.2.51`
+- `10.1.2.52`
+
+#### NFS Mounts
+
+- `/mnt/docker`
+- `/mnt/downloads`
+- `/mnt/movies`
+- `/mnt/music`
+- `/mnt/translate`
+- `/mnt/tv`
+
+### DNS (pihole)
+
+- `10.1.2.2`
+- `10.1.2.3`
