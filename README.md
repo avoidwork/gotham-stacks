@@ -15,6 +15,7 @@ This repo contains **prebuilt Kubernetes manifest bundles** for homelab-style â€
 #### NFS Mounts
 
 - `/mnt/docker`
+- `/mnt/downloads`
 - `/mnt/movies`
 - `/mnt/music`
 - `/mnt/translate`
