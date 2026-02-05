@@ -49,11 +49,11 @@ spec:
           image: linuxserver/prowlarr:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "1024Mi"
           ports:
             - containerPort: 9696
           env:
@@ -120,7 +120,7 @@ spec:
           image: linuxserver/lidarr:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
               cpu: "2"
@@ -203,7 +203,7 @@ spec:
           image: linuxserver/radarr:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
               cpu: "2"
@@ -286,7 +286,7 @@ spec:
           image: linuxserver/sabnzbd:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
               cpu: "2"
@@ -363,7 +363,7 @@ spec:
           image: linuxserver/sonarr:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
               cpu: "2"
@@ -446,11 +446,11 @@ spec:
           image: linuxserver/transmission:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "1024Mi"
           ports:
             - containerPort: 9091
             - containerPort: 51413

@@ -174,7 +174,7 @@ spec:
           image: redis:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "1024Mi"
             limits:
               cpu: "1"
@@ -243,6 +243,13 @@ spec:
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:7.0-ubi9
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           args:
             - "--dbpath=/data/db"
             - "--bind_ip_all"
@@ -419,11 +426,11 @@ spec:
           image: nginx:latest
           resources:
             requests:
-              cpu: "2"
-              memory: "1024Mi"
+              cpu: "0.5"
+              memory: "512Mi"
             limits:
-              cpu: "4"
-              memory: "4096Mi"
+              cpu: "2"
+              memory: "2048Mi"
           ports:
             - containerPort: 80
           env:
@@ -500,10 +507,10 @@ spec:
           image: searxng/searxng:latest
           resources:
             requests:
-              cpu: "2"
-              memory: "2048Mi"
+              cpu: "1"
+              memory: "1024Mi"
             limits:
-              cpu: "4"
+              cpu: "2"
               memory: "4096Mi"
           ports:
             - containerPort: 8080
@@ -586,8 +593,8 @@ spec:
           image: ghcr.io/open-webui/open-webui:main
           resources:
             requests:
-              cpu: "2"
-              memory: "1024Mi"
+              cpu: "0.5"
+              memory: "512Mi"
             limits:
               cpu: "2"
               memory: "4096Mi"
@@ -662,8 +669,8 @@ spec:
           image: docker.n8n.io/n8nio/n8n:latest
           resources:
             requests:
-              cpu: "2"
-              memory: "1024Mi"
+              cpu: "0.5"
+              memory: "512Mi"
             limits:
               cpu: "2"
               memory: "4096Mi"
@@ -746,7 +753,7 @@ spec:
           image: jetbrains/teamcity-server:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "1024Mi"
             limits:
               cpu: "2"
@@ -841,6 +848,13 @@ spec:
       containers:
         - name: nginx-proxy-manager
           image: jc21/nginx-proxy-manager:latest
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 80
             - containerPort: 81
@@ -934,8 +948,8 @@ spec:
           image: grafana/grafana:latest
           resources:
             requests:
-              cpu: "2"
-              memory: "1024Mi"
+              cpu: "0.5"
+              memory: "512Mi"
             limits:
               cpu: "2"
               memory: "4096Mi"
@@ -1011,8 +1025,8 @@ spec:
           image: influxdb:2
           resources:
             requests:
-              cpu: "1"
-              memory: "1024Mi"
+              cpu: "0.5"
+              memory: "512Mi"
             limits:
               cpu: "2"
               memory: "4096Mi"
@@ -1099,11 +1113,11 @@ spec:
           image: prom/prometheus:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "1024Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "2048Mi"
           ports:
             - containerPort: 9090
           env:
@@ -1185,10 +1199,10 @@ spec:
           image: ekofr/pihole-exporter:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
           ports:
             - containerPort: 9617
@@ -1209,12 +1223,10 @@ metadata:
 spec:
   selector:
     app: pihole-exporter-1
-  type: NodePort
   ports:
     - protocol: TCP
       port: 9617
       targetPort: 9617
-      nodePort: 31100
 
 ---
 # ------------------------------------------------
@@ -1253,10 +1265,10 @@ spec:
           image: ekofr/pihole-exporter:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "1"
+              cpu: "0.5"
               memory: "512Mi"
           ports:
             - containerPort: 9617
@@ -1277,9 +1289,7 @@ metadata:
 spec:
   selector:
     app: pihole-exporter-2
-  type: NodePort
   ports:
     - protocol: TCP
       port: 9617
       targetPort: 9617
-      nodePort: 31101
