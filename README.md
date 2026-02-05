@@ -14,7 +14,7 @@ A consolidated manifest for a general-purpose “lab” environment.
     - MySQL (`Deployment` + `Service` via `NodePort`)
     - Redis (`Deployment` + `Service` via `NodePort`)
     - MongoDB replica set (`StatefulSet` + headless `Service` + `NodePort` `Service` + init `Job`)
-- **Platform apps (examples):**
+- **Platform apps:**
     - nginx
     - SearXNG
     - Open WebUI
