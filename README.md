@@ -119,9 +119,9 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - `10.1.2.51`
 - `10.1.2.52`
 
-#### Host Path NFS Mounts
+#### Host Paths
 
-These are NFS mounts from a NAS.
+These are NFS mounts from a NAS, in each node.
 
 - `/mnt/docker`
 - `/mnt/downloads`
