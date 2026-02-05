@@ -1,69 +1,89 @@
 # Gotham Stacks
 
-This repo contains **prebuilt Kubernetes manifest bundles** for homelab-style “stacks”. Each file is intended to be applied as-is (a single multi-document YAML) and will create its own Namespace plus the related Deployments/StatefulSets/Services.
+This repository provides **prebuilt Kubernetes “stack” manifests** for a homelab. A *stack* here means: **one YAML file you apply**, and Kubernetes creates everything needed for that group of apps.
 
-## Files
+Each stack file is a **single multi-document YAML** (many Kubernetes objects separated by `---`). When you apply it, it creates:
 
-### `lab.yaml` — **Lab Stack**
-A consolidated manifest for a general-purpose “lab” environment.
+- a dedicated **Namespace** (a logical “folder” for resources)
+- the app workloads (usually **Deployments** or **StatefulSets**)
+- **Services** so you can reach the apps on the network
+- sometimes **PersistentVolumeClaims (PVCs)** for storage
 
-**What it creates (high level):**
-- **Namespace:** `lab-stack`
-- **Storage:** several `PersistentVolumeClaim`s (for select apps)
-- **Datastores:**
-    - MySQL (`Deployment` + `Service` via `NodePort`)
-    - Redis (`Deployment` + `Service` via `NodePort`)
-    - MongoDB replica set (`StatefulSet` + headless `Service` + `NodePort` `Service` + init `Job`)
-- **Platform apps:**
-    - nginx
-    - SearXNG
-    - Open WebUI
-    - n8n
-    - TeamCity
-    - Nginx Proxy Manager
-- **Monitoring:**
-    - Grafana
-    - InfluxDB
-    - Prometheus
-- **Utilities / exporters:** (example: Pi-hole exporters)
-
-**How it’s exposed:**
-
-Most apps are exposed using **`NodePort`** Services. After applying, you can list the ports with: `kubectl -n lab-stack get svc`
-
-**Dependencies / assumptions:**
-- A working Kubernetes cluster and `kubectl` context.
-- Storage classes referenced by the PVCs must exist in your cluster (for example, an NFS-backed class for RWX claims).
-- Some components expect **Kubernetes Secrets** to already exist (e.g., DB credentials). Create them before applying (see “Secrets” below).
-- Some workloads use `hostPath` volumes; ensure those directories exist on the node(s) that will run the pods.
+These manifests are intended to be applied **as‑is**, then customized to match your environment.
 
 ---
 
-### `media.yaml` — **Media Stack**
-A consolidated manifest for media-management and download services.
+## What you’ll find in this repo
 
-**What it creates (high level):**
+### `lab.yaml` — Lab Stack
+
+A general‑purpose “lab” environment: databases, common platform tools, monitoring, and utilities.
+
+**Creates (high level):**
+- **Namespace:** `lab-stack`
+- **Storage:** multiple **PVCs** for apps that need persistent data
+- **Datastores:**
+  - **MySQL** (Deployment + Service exposed via NodePort)
+  - **Redis** (Deployment + Service exposed via NodePort)
+  - **MongoDB replica set** (StatefulSet + headless Service + NodePort Service + an init Job)
+- **Platform apps:** nginx, SearXNG, Open WebUI, n8n, TeamCity, Nginx Proxy Manager
+- **Monitoring:** Grafana, InfluxDB, Prometheus
+- **Utilities/exporters:** Pi‑hole exporters
+
+**How you access it (networking):**
+Most apps are exposed using **NodePort Services**.
+
+That means you can access an app at:
+
+`http://<node-ip>:<nodePort>`
+
+To see which ports were assigned/configured:
+
+`kubectl -n lab-stack get svc`
+
+**Important assumptions / prerequisites:**
+- You have a working Kubernetes cluster and `kubectl` is pointed at it (your “context” is set correctly).
+- Any **StorageClasses** referenced by PVCs must already exist in your cluster (for example, an NFS‑backed class if you need ReadWriteMany storage).
+- Some components reference **Kubernetes Secrets** (like database passwords). Those secrets must exist *before* you apply the stack.
+- Some workloads use **hostPath** volumes (paths on the node’s filesystem). If so, those directories must exist on whichever node the pods land on.
+
+---
+
+### `media.yaml` — Media Stack
+
+A stack focused on media management and downloading tools.
+
+**Creates (high level):**
 - **Namespace:** `media-stack`
-- **Deployments:** Prowlarr, Lidarr, Radarr, Sonarr, Sabnzbd, Transmission
-- **Services:** each app exposed via **`NodePort`**
+- **Apps:** Prowlarr, Lidarr, Radarr, Sonarr, Sabnzbd, Transmission
+- **Networking:** each app exposed via **NodePort**
 
 **Data persistence:**
-This stack uses `hostPath` mounts for `/config` and media/download folders. Ensure the mapped directories exist on the node(s) where these pods run.
+This stack uses **hostPath mounts** for config and media/download folders.
 
-**Check what ports are in use:** `kubectl -n media-stack get svc`
+That means:
+- your data is stored on the Kubernetes node’s filesystem at specific paths
+- pods become implicitly tied to nodes where those paths exist
+- in multi‑node clusters, you must ensure the same paths exist (and contain the right data) on every node that might run the pod—or constrain scheduling to specific nodes
 
-## Usage
+To see ports in use:
+
+`kubectl -n media-stack get svc`
+
+---
+
+## How to use
 
 ### Apply a stack
 
-```
+```shell
 kubectl apply -f lab.yaml
 kubectl apply -f media.yaml
 ```
 
-### Verify resources
+### Verify what was created
 
-```
+```shell
 kubectl get ns
 kubectl -n lab-stack get all
 kubectl -n media-stack get all
@@ -71,57 +91,68 @@ kubectl -n media-stack get all
 
 ### Remove a stack
 
-```
+```shell
 kubectl delete -f lab.yaml
 kubectl delete -f media.yaml
 ```
 
+---
+
 ## Secrets (required for some services)
 
-Some resources reference secrets (for example, database passwords). Create them **before** applying the stack(s). Example patterns:
+Some resources expect secrets (typically passwords) to already exist.
+
+Create the required secrets **before** applying the stack.
+
+Example pattern:
 
 ```shell
-kubectl -n lab-stack create secret generic mysql  --from-literal=MYSQL_ROOT_PASSWORD="<your-mysql-root-password>"
+kubectl -n lab-stack create secret generic mysql --from-literal=MYSQL_ROOT_PASSWORD="<your-mysql-root-password>"
 kubectl -n lab-stack create secret generic mongodb --from-literal=MONGO_INITDB_ROOT_PASSWORD="<your-mongodb-root-password>"
 kubectl -n lab-stack create secret generic influxdb --from-literal=DOCKER_INFLUXDB_INIT_PASSWORD="<your-influxdb-password>"
 kubectl -n lab-stack create secret generic teamcity --from-literal=TEAMCITY_DB_PASSWORD="<your-teamcity-db-password>"
 kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD="<your-pihole-password>"
 ```
 
-## Notes / customization tips
+If a secret is missing, the related pods will usually fail to start (you’ll see errors when describing the pod or checking events).
 
-- **NodePort access:** reach services at `http://<node-ip>:<nodePort>`.
-- **hostPath volumes:** these tie workloads to specific nodes. For multi-node clusters, consider switching to PVCs + a shared storage class.
-- **Timezone / IDs:** several containers use `TZ`, `PUID`, and `PGID`. Adjust to match your environment.
-- **DNS config:** manifests may include explicit DNS settings; change them if your cluster DNS differs.
-- **Nginx Proxy Manager:** Proxies must be pointed at a cluster IP due to a DNS issue in the nginx instance in the pod.
-- **TeamCity:** Installation requires accessing the server log to retrieve the token required to complete the installation from the web interface.
-- **n8n & Open WebUI:** DGX Spark with Ollama is in the host network.
-- **storageClass nfs:** Configuration of an NFS storage class is expected.
+---
 
-## Cluster Host
+## Notes & customization tips
 
-- CPU: AMD Epyc 4464P (12 core / 24 thread)
-- Memory: 128 GiB
+- **NodePort access:** services are reachable at `http://<node-ip>:<nodePort>`.
+- **hostPath volumes:** these are simple and fast for homelabs, but they reduce portability. For a more “Kubernetes-native” approach, prefer **PVCs** backed by shared storage.
+- **Timezone / IDs:** some containers use `TZ`, `PUID`, and `PGID`. Adjust them to match your user/group setup and local timezone.
+- **DNS config:** some manifests may set explicit DNS behavior. If your cluster DNS setup differs, you may need to adjust those settings.
+- **Nginx Proxy Manager:** proxy targets may need to point to a specific cluster address depending on DNS/networking behavior in your environment.
+- **TeamCity:** first-time setup can require grabbing a token from logs to finish installation via the web UI.
+- **StorageClass `nfs`:** an NFS-based StorageClass is expected if PVCs reference it.
+
+---
+
+## Reference: homelab environment (example)
+
+These manifests were designed around a specific homelab setup:
+
+### Cluster host
+- CPU: AMD Epyc 4464P (12c/24t)
+- RAM: 128 GiB
 - Host OS: Proxmox 9
-- Network: Bonded 25 GbE (50 GbE)
+- Network: bonded 25 GbE (50 GbE)
 
-### Node (3x)
-
-- Virtual Machine OS: Ubuntu 24.04 LTS with microk8s
+### Kubernetes nodes (3x VMs)
+- OS: Ubuntu 24.04 LTS (microk8s)
 - CPU: 8 threads
-- Memory: 24 GiB
+- RAM: 24 GiB
 - Disk: 256 GiB
 
-#### IPs
-
+**Node IPs:**
 - `10.1.2.50`
 - `10.1.2.51`
 - `10.1.2.52`
 
-#### Host Paths
-
-These are NFS mounts from a NAS, in each node.
+### Host paths used by workloads
+These are NFS mounts from a NAS, mounted on each node:
 
 - `/mnt/docker`
 - `/mnt/downloads`
@@ -130,9 +161,8 @@ These are NFS mounts from a NAS, in each node.
 - `/mnt/translate`
 - `/mnt/tv`
 
-## DNS (pihole)
-
-Local DNS settings have `kube.lan` with all IPs registered, and `kube-N.lan` for specific nodes.
+### DNS (Pi-hole)
+Local DNS uses `kube.lan` for the cluster, plus per-node hostnames like `kube-N.lan`.
 
 - `10.1.2.2`
 - `10.1.2.3`
