@@ -97,15 +97,20 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - **Nginx Proxy Manager:** Proxies must be pointed at a cluster IP due to a DNS issue in the nginx instance in the pod.
 - **TeamCity:** Installation requires accessing the server log to retrieve the token required to complete the installation from the web interface.
 
-### Cluster Nodes
+## Cluster Host
 
-#### Hardware
-
-- AMD Epyc 4464P (12 core / 24 thread)
+- CPU: AMD Epyc 4464P (12 core / 24 thread)
 - Memory: 128 GiB
 - Host OS: Proxmox 9
 - Network: Bonded 25 GbE (50 GbE)
 - DGX Spark with Ollama is in the host network
+
+### Node (3x)
+
+- Virtual Machine: Ubuntu 24.04 LTS with microk8s
+- CPU: 8 threads
+- Memory: 24 GiB
+- Disk: 256 GiB
 
 #### IPs
 
@@ -122,7 +127,7 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - `/mnt/translate`
 - `/mnt/tv`
 
-### DNS (pihole)
+## DNS (pihole)
 
 - `10.1.2.2`
 - `10.1.2.3`
