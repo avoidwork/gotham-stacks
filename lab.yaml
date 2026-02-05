@@ -139,6 +139,53 @@ spec:
       nodePort: 31306
 
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-teamcity-init
+  namespace: lab-stack
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: mysql:9.6.0
+          command: ["/bin/bash", "-lc"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for MySQL to accept connections..."
+              until mysqladmin ping -h mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" --silent; do
+                sleep 2
+              done
+
+              echo "Creating TeamCity database and user (idempotent)..."
+              mysql -h mysql -uroot -p"${MYSQL_ROOT_PASSWORD}" <<SQL
+              CREATE DATABASE IF NOT EXISTS teamcity COLLATE utf8mb4_bin;
+              CREATE USER IF NOT EXISTS 'teamcity'@'%' IDENTIFIED BY '${TEAMCITY_DB_PASSWORD}';
+              ALTER USER 'teamcity'@'%' IDENTIFIED BY '${TEAMCITY_DB_PASSWORD}';
+              GRANT ALL PRIVILEGES ON teamcity.* TO 'teamcity'@'%';
+              GRANT PROCESS ON *.* TO 'teamcity'@'%';
+              FLUSH PRIVILEGES;
+              SQL
+
+              echo "Done."
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql
+                  key: MYSQL_ROOT_PASSWORD
+            - name: TEAMCITY_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: teamcity
+                  key: TEAMCITY_DB_PASSWORD
+
+---
 # ------------------------------------------------
 # Redis
 # ------------------------------------------------
