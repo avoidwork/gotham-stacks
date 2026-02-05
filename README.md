@@ -124,7 +124,7 @@ If a secret is missing, the related pods will usually fail to start (you’ll se
 - **hostPath volumes:** these are simple and fast for homelabs, but they reduce portability. For a more “Kubernetes-native” approach, prefer **PVCs** backed by shared storage.
 - **Timezone / IDs:** some containers use `TZ`, `PUID`, and `PGID`. Adjust them to match your user/group setup and local timezone.
 - **DNS config:** some manifests may set explicit DNS behavior. If your cluster DNS setup differs, you may need to adjust those settings.
-- **Nginx Proxy Manager:** proxy targets may need to point to a specific cluster address depending on DNS/networking behavior in your environment.
+- **Nginx Proxy Manager:** proxy targets work best with the full hostname, e.g. `nginx.lab-stack.svc.cluster.local`.
 - **TeamCity:** first-time setup can require grabbing a token from logs to finish installation via the web UI.
 - **StorageClass `nfs`:** an NFS-based StorageClass is expected if PVCs reference it.
 
