@@ -47,6 +47,13 @@ spec:
       containers:
         - name: prowlarr
           image: linuxserver/prowlarr:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 9696
           env:
@@ -111,6 +118,13 @@ spec:
       containers:
         - name: lidarr
           image: linuxserver/lidarr:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8686
           env:
@@ -187,6 +201,13 @@ spec:
       containers:
         - name: radarr
           image: linuxserver/radarr:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 7878
           env:
@@ -263,6 +284,13 @@ spec:
       containers:
         - name: sabnzbd
           image: linuxserver/sabnzbd:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8080
           env:
@@ -333,6 +361,13 @@ spec:
       containers:
         - name: sonarr
           image: linuxserver/sonarr:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8989
           env:
@@ -409,6 +444,13 @@ spec:
       containers:
         - name: transmission
           image: linuxserver/transmission:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 9091
             - containerPort: 51413
