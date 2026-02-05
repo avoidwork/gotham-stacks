@@ -98,6 +98,13 @@ spec:
       containers:
         - name: mysql
           image: mysql:9.6.0
+          resources:
+            requests:
+              cpu: "1"
+              memory: "2048Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 3306
           env:
@@ -165,6 +172,13 @@ spec:
       containers:
         - name: redis
           image: redis:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1024Mi"
+            limits:
+              cpu: "1"
+              memory: "4096Mi"
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -403,6 +417,13 @@ spec:
       containers:
         - name: nginx
           image: nginx:latest
+          resources:
+            requests:
+              cpu: "2"
+              memory: "1024Mi"
+            limits:
+              cpu: "4"
+              memory: "4096Mi"
           ports:
             - containerPort: 80
           env:
@@ -477,6 +498,13 @@ spec:
       containers:
         - name: searxng
           image: searxng/searxng:latest
+          resources:
+            requests:
+              cpu: "2"
+              memory: "2048Mi"
+            limits:
+              cpu: "4"
+              memory: "4096Mi"
           ports:
             - containerPort: 8080
           env:
@@ -556,6 +584,13 @@ spec:
       containers:
         - name: open-webui
           image: ghcr.io/open-webui/open-webui:main
+          resources:
+            requests:
+              cpu: "2"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8080
           env:
@@ -625,6 +660,13 @@ spec:
       containers:
         - name: n8n
           image: docker.n8n.io/n8nio/n8n:latest
+          resources:
+            requests:
+              cpu: "2"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 5678
           env:
@@ -702,6 +744,13 @@ spec:
       containers:
         - name: teamcity
           image: jetbrains/teamcity-server:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8111
           env:
@@ -883,6 +932,13 @@ spec:
       containers:
         - name: grafana
           image: grafana/grafana:latest
+          resources:
+            requests:
+              cpu: "2"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 3000
           env:
@@ -953,6 +1009,13 @@ spec:
       containers:
         - name: influxdb
           image: influxdb:2
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 8086
           env:
@@ -1034,6 +1097,13 @@ spec:
       containers:
         - name: prometheus
           image: prom/prometheus:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1024Mi"
+            limits:
+              cpu: "2"
+              memory: "4096Mi"
           ports:
             - containerPort: 9090
           env:
@@ -1113,6 +1183,13 @@ spec:
       containers:
         - name: pihole-exporter-1
           image: ekofr/pihole-exporter:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
           ports:
             - containerPort: 9617
           env:
@@ -1174,6 +1251,13 @@ spec:
       containers:
         - name: pihole-exporter-2
           image: ekofr/pihole-exporter:latest
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
           ports:
             - containerPort: 9617
           env:
