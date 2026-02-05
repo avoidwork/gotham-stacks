@@ -141,7 +141,7 @@ These manifests were designed around a specific homelab setup:
 - Network: bonded 25 GbE (50 GbE)
 
 ### Kubernetes nodes (3x VMs)
-- OS: Ubuntu 24.04 LTS (microk8s)
+- OS: Ubuntu Server 24.04 LTS (microk8s)
 - CPU: 8 threads
 - RAM: 24 GiB
 - Disk: 256 GiB
