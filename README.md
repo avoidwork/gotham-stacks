@@ -96,8 +96,8 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - **DNS config:** manifests may include explicit DNS settings; change them if your cluster DNS differs.
 - **Nginx Proxy Manager:** Proxies must be pointed at a cluster IP due to a DNS issue in the nginx instance in the pod.
 - **TeamCity:** Installation requires accessing the server log to retrieve the token required to complete the installation from the web interface.
-- **n8n & Open WebUI:** DGX Spark with Ollama is in the host network
-- **storageClass nfs:** Configuration of an NFS storage class is expected
+- **n8n & Open WebUI:** DGX Spark with Ollama is in the host network.
+- **storageClass nfs:** Configuration of an NFS storage class is expected.
 
 ## Cluster Host
 
