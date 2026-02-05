@@ -108,7 +108,7 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 
 ### Node (3x)
 
-- Virtual Machine: Ubuntu 24.04 LTS with microk8s
+- Virtual Machine OS: Ubuntu 24.04 LTS with microk8s
 - CPU: 8 threads
 - Memory: 24 GiB
 - Disk: 256 GiB
@@ -119,7 +119,9 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 - `10.1.2.51`
 - `10.1.2.52`
 
-#### NFS Mounts
+#### Host Path NFS Mounts
+
+These are NFS mounts from a NAS.
 
 - `/mnt/docker`
 - `/mnt/downloads`
