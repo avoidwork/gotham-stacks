@@ -129,5 +129,7 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 
 ## DNS (pihole)
 
+Local DNS settings have `kube.lan` with all IPs registered, and `kube-N.lan` for specific nodes.
+
 - `10.1.2.2`
 - `10.1.2.3`
