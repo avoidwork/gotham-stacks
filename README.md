@@ -99,6 +99,14 @@ kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD
 
 ### Cluster Nodes
 
+#### Hardware
+
+- AMD Epyc 4464P (12 core / 24 thread)
+- Memory: 128 GiB
+- Host OS: Proxmox 9
+- Network: Bonded 25 GbE (50 GbE)
+- DGX Spark with Ollama is in the host network
+
 #### IPs
 
 - `10.1.2.50`
