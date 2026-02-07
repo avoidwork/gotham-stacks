@@ -100,10 +100,10 @@ spec:
           image: mysql:9.6.0
           resources:
             requests:
-              cpu: "1"
-              memory: "2048Mi"
+              cpu: "0.1"
+              memory: "1024Mi"
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: "4096Mi"
           ports:
             - containerPort: 3306
@@ -221,10 +221,10 @@ spec:
           image: redis:latest
           resources:
             requests:
-              cpu: "0.5"
+              cpu: "0.1"
               memory: "1024Mi"
             limits:
-              cpu: "1"
+              cpu: "0.5"
               memory: "4096Mi"
           ports:
             - containerPort: 6379
@@ -295,7 +295,7 @@ spec:
               cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: "4096Mi"
           args:
             - "--dbpath=/data/db"
@@ -554,10 +554,10 @@ spec:
           image: searxng/searxng:latest
           resources:
             requests:
-              cpu: "1"
+              cpu: "0.1"
               memory: "1024Mi"
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: "4096Mi"
           ports:
             - containerPort: 8080
@@ -643,8 +643,8 @@ spec:
               cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "2048Mi"
           ports:
             - containerPort: 8080
           env:
@@ -719,8 +719,8 @@ spec:
               cpu: "0.5"
               memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "2048Mi"
           ports:
             - containerPort: 5678
           env:
@@ -803,7 +803,7 @@ spec:
               cpu: "0.5"
               memory: "1024Mi"
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: "4096Mi"
           ports:
             - containerPort: 8111
@@ -901,7 +901,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "2"
-              memory: "4096Mi"
+              memory: "2048Mi"
           ports:
             - containerPort: 80
             - containerPort: 81
@@ -995,10 +995,10 @@ spec:
           image: grafana/grafana:latest
           resources:
             requests:
-              cpu: "0.5"
+              cpu: "0.1"
               memory: "512Mi"
             limits:
-              cpu: "2"
+              cpu: "1"
               memory: "4096Mi"
           ports:
             - containerPort: 3000
@@ -1072,11 +1072,11 @@ spec:
           image: influxdb:2
           resources:
             requests:
-              cpu: "0.5"
+              cpu: "0.1"
               memory: "512Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "2048Mi"
           ports:
             - containerPort: 8086
           env:
@@ -1160,7 +1160,7 @@ spec:
           image: prom/prometheus:latest
           resources:
             requests:
-              cpu: "0.5"
+              cpu: "0.1"
               memory: "1024Mi"
             limits:
               cpu: "1"
@@ -1246,8 +1246,8 @@ spec:
           image: ekofr/pihole-exporter:latest
           resources:
             requests:
-              cpu: "0.5"
-              memory: "512Mi"
+              cpu: "0.1"
+              memory: "128Mi"
             limits:
               cpu: "0.5"
               memory: "512Mi"
@@ -1312,8 +1312,8 @@ spec:
           image: ekofr/pihole-exporter:latest
           resources:
             requests:
-              cpu: "0.5"
-              memory: "512Mi"
+              cpu: "0.1"
+              memory: "128Mi"
             limits:
               cpu: "0.5"
               memory: "512Mi"
