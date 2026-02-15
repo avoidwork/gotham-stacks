@@ -68,9 +68,9 @@ spec:
               mountPath: /config
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/prowlarr
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/prowlarr
 ---
 apiVersion: v1
 kind: Service
@@ -143,17 +143,17 @@ spec:
               mountPath: /music
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/lidarr
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/lidarr
         - name: downloads
-          hostPath:
-            path: /mnt/downloads
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /downloads
         - name: music
-          hostPath:
-            path: /mnt/music
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /music
 ---
 apiVersion: v1
 kind: Service
@@ -226,17 +226,17 @@ spec:
               mountPath: /movies
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/radarr
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/radarr
         - name: downloads
-          hostPath:
-            path: /mnt/downloads
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /downloads
         - name: movies
-          hostPath:
-            path: /mnt/movies
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /movies
 ---
 apiVersion: v1
 kind: Service
@@ -307,13 +307,13 @@ spec:
               mountPath: /downloads
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/sabnzbd
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/sabnzbd
         - name: downloads
-          hostPath:
-            path: /mnt/downloads
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /downloads
 ---
 apiVersion: v1
 kind: Service
@@ -386,17 +386,17 @@ spec:
               mountPath: /tv
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/sonarr
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/sonarr
         - name: downloads
-          hostPath:
-            path: /mnt/downloads
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /downloads
         - name: tv
-          hostPath:
-            path: /mnt/tv
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /tv
 ---
 apiVersion: v1
 kind: Service
@@ -468,13 +468,13 @@ spec:
               mountPath: /downloads
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/transmission
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/transmission
         - name: downloads
-          hostPath:
-            path: /mnt/downloads
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /downloads
 ---
 apiVersion: v1
 kind: Service

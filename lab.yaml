@@ -233,9 +233,9 @@ spec:
               mountPath: /data
       volumes:
         - name: redis-data
-          hostPath:
-            path: /mnt/docker/redis
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/redis
 
 ---
 apiVersion: v1
@@ -494,13 +494,13 @@ spec:
               mountPath: /usr/share/nginx
       volumes:
         - name: conf
-          hostPath:
-            path: /mnt/docker/nginx/conf.d
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/nginx/conf.d
         - name: wwwroot
-          hostPath:
-            path: /mnt/docker/nginx/wwwroot
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/nginx/wwwroot
 
 ---
 apiVersion: v1
@@ -579,13 +579,13 @@ spec:
               mountPath: /var/cache/searxng
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/searxng/config
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/searxng/config
         - name: data
-          hostPath:
-            path: /mnt/docker/searxng/data
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/searxng/data
 
 ---
 apiVersion: v1
@@ -659,9 +659,9 @@ spec:
               mountPath: /app/backend/data
       volumes:
         - name: open-webui-data
-          hostPath:
-            path: /mnt/docker/open-webui
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/open-webui
 
 ---
 apiVersion: v1
@@ -739,13 +739,13 @@ spec:
               mountPath: /mnt/translate
       volumes:
         - name: n8n-data
-          hostPath:
-            path: /mnt/docker/n8n
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/n8n
         - name: translate
-          hostPath:
-            path: /mnt/translate
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /translate
 
 ---
 apiVersion: v1
@@ -830,17 +830,17 @@ spec:
               mountPath: /data/teamcity_server/datadir
       volumes:
         - name: logs
-          hostPath:
-            path: /mnt/docker/teamcity/logs
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/teamcity/logs
         - name: temp
-          hostPath:
-            path: /mnt/docker/teamcity/temp
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/teamcity/temp
         - name: data
-          hostPath:
-            path: /mnt/docker/teamcity/data
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/teamcity/data
 
 ---
 apiVersion: v1
@@ -1016,9 +1016,9 @@ spec:
               mountPath: /var/lib/grafana
       volumes:
         - name: grafana-data
-          hostPath:
-            path: /mnt/docker/grafana
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/grafana
 
 ---
 apiVersion: v1
@@ -1100,13 +1100,13 @@ spec:
               mountPath: /var/lib/influxdb2
       volumes:
         - name: influxdb-config
-          hostPath:
-            path: /mnt/docker/influxdb/config
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/influxdb/config
         - name: influxdb-data
-          hostPath:
-            path: /mnt/docker/influxdb/data
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/influxdb/data
 
 ---
 apiVersion: v1
@@ -1181,13 +1181,13 @@ spec:
               mountPath: /prometheus
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/prometheus/config
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/prometheus/config
         - name: data
-          hostPath:
-            path: /mnt/docker/prometheus/data
-            type: Directory
+          nfs:
+            server: 10.1.2.5
+            path: /docker/prometheus/data
 
 ---
 apiVersion: v1
