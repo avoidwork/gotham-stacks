@@ -13,6 +13,24 @@ These manifests are intended to be applied **as‑is**, then customized to match
 
 ---
 
+## Network Storage
+
+A `storageClass` of `nfs-client` is expected, for mapping network storage within deployments:
+
+```console
+microk8s helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+microk8s helm repo update
+microk8s helm install nfs-client-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+  --namespace nfs-client \
+  --create-namespace \
+  --set nfs.server=<IP> \
+  --set nfs.path=/ \
+  --set storageClass.name=nfs-client \
+  --set storageClass.defaultClass=true
+```
+
+---
+
 ## What you’ll find in this repo
 
 ### `lab.yaml` — Lab Stack

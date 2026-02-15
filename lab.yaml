@@ -20,8 +20,21 @@ metadata:
 
 ---
 # ------------------------------------------------
-# 2) Storage (PVCs)
+# 2) Storage (StorageClass + PVCs)
 # ------------------------------------------------
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-docker-path
+provisioner: nfs-subdir-external-provisioner
+parameters:
+  pathPattern: "${.PVC.annotations['nfs.io/storage-path']}"
+  onDelete: retain
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -61,10 +74,250 @@ spec:
       storage: 10Gi
 
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/redis"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-conf-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/nginx/conf.d"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-wwwroot-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/nginx/wwwroot"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: searxng-config-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/searxng/config"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: searxng-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/searxng/data"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: open-webui-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/open-webui"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: n8n-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/n8n"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: teamcity-logs-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/teamcity/logs"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: teamcity-temp-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/teamcity/temp"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: teamcity-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/teamcity/data"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/grafana"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-config-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/influxdb/config"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/influxdb/data"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-config-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/prometheus/config"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-data-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "docker/prometheus/data"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: translate-rwx
+  namespace: lab-stack
+  annotations:
+    nfs.io/storage-path: "translate"
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs-docker-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
 # ------------------------------------------------
 # 3) Datastores (DB/Cache)
 # ------------------------------------------------
-
 # ------------------------------------------------
 # MySQL
 # ------------------------------------------------
@@ -233,9 +486,8 @@ spec:
               mountPath: /data
       volumes:
         - name: redis-data
-          hostPath:
-            path: /mnt/docker/redis
-            type: Directory
+          persistentVolumeClaim:
+            claimName: redis-data-rwx
 
 ---
 apiVersion: v1
@@ -494,13 +746,11 @@ spec:
               mountPath: /usr/share/nginx
       volumes:
         - name: conf
-          hostPath:
-            path: /mnt/docker/nginx/conf.d
-            type: Directory
+          persistentVolumeClaim:
+            claimName: nginx-conf-rwx
         - name: wwwroot
-          hostPath:
-            path: /mnt/docker/nginx/wwwroot
-            type: Directory
+          persistentVolumeClaim:
+            claimName: nginx-wwwroot-rwx
 
 ---
 apiVersion: v1
@@ -579,13 +829,11 @@ spec:
               mountPath: /var/cache/searxng
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/searxng/config
-            type: Directory
+          persistentVolumeClaim:
+            claimName: searxng-config-rwx
         - name: data
-          hostPath:
-            path: /mnt/docker/searxng/data
-            type: Directory
+          persistentVolumeClaim:
+            claimName: searxng-data-rwx
 
 ---
 apiVersion: v1
@@ -659,9 +907,8 @@ spec:
               mountPath: /app/backend/data
       volumes:
         - name: open-webui-data
-          hostPath:
-            path: /mnt/docker/open-webui
-            type: Directory
+          persistentVolumeClaim:
+            claimName: open-webui-data-rwx
 
 ---
 apiVersion: v1
@@ -739,13 +986,11 @@ spec:
               mountPath: /mnt/translate
       volumes:
         - name: n8n-data
-          hostPath:
-            path: /mnt/docker/n8n
-            type: Directory
+          persistentVolumeClaim:
+            claimName: n8n-data-rwx
         - name: translate
-          hostPath:
-            path: /mnt/translate
-            type: Directory
+          persistentVolumeClaim:
+            claimName: translate-rwx
 
 ---
 apiVersion: v1
@@ -830,17 +1075,14 @@ spec:
               mountPath: /data/teamcity_server/datadir
       volumes:
         - name: logs
-          hostPath:
-            path: /mnt/docker/teamcity/logs
-            type: Directory
+          persistentVolumeClaim:
+            claimName: teamcity-logs-rwx
         - name: temp
-          hostPath:
-            path: /mnt/docker/teamcity/temp
-            type: Directory
+          persistentVolumeClaim:
+            claimName: teamcity-temp-rwx
         - name: data
-          hostPath:
-            path: /mnt/docker/teamcity/data
-            type: Directory
+          persistentVolumeClaim:
+            claimName: teamcity-data-rwx
 
 ---
 apiVersion: v1
@@ -1016,9 +1258,8 @@ spec:
               mountPath: /var/lib/grafana
       volumes:
         - name: grafana-data
-          hostPath:
-            path: /mnt/docker/grafana
-            type: Directory
+          persistentVolumeClaim:
+            claimName: grafana-data-rwx
 
 ---
 apiVersion: v1
@@ -1100,13 +1341,11 @@ spec:
               mountPath: /var/lib/influxdb2
       volumes:
         - name: influxdb-config
-          hostPath:
-            path: /mnt/docker/influxdb/config
-            type: Directory
+          persistentVolumeClaim:
+            claimName: influxdb-config-rwx
         - name: influxdb-data
-          hostPath:
-            path: /mnt/docker/influxdb/data
-            type: Directory
+          persistentVolumeClaim:
+            claimName: influxdb-data-rwx
 
 ---
 apiVersion: v1
@@ -1181,13 +1420,11 @@ spec:
               mountPath: /prometheus
       volumes:
         - name: config
-          hostPath:
-            path: /mnt/docker/prometheus/config
-            type: Directory
+          persistentVolumeClaim:
+            claimName: prometheus-config-rwx
         - name: data
-          hostPath:
-            path: /mnt/docker/prometheus/data
-            type: Directory
+          persistentVolumeClaim:
+            claimName: prometheus-data-rwx
 
 ---
 apiVersion: v1
