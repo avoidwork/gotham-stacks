@@ -101,10 +101,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "1024Mi"
+              memory: "1Gi"
             limits:
               cpu: "1"
-              memory: "4096Mi"
+              memory: "4Gi"
           ports:
             - containerPort: 3306
           env:
@@ -222,10 +222,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "1024Mi"
+              memory: "1Gi"
             limits:
-              cpu: "0.5"
-              memory: "4096Mi"
+              cpu: "1"
+              memory: "4Gi"
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -296,7 +296,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "1"
-              memory: "4096Mi"
+              memory: "4Gi"
           args:
             - "--dbpath=/data/db"
             - "--bind_ip_all"
@@ -449,7 +449,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: nginx
@@ -477,7 +477,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "2"
-              memory: "2048Mi"
+              memory: "2Gi"
           ports:
             - containerPort: 80
           env:
@@ -555,10 +555,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "1024Mi"
+              memory: "1Gi"
             limits:
-              cpu: "1"
-              memory: "4096Mi"
+              cpu: "2"
+              memory: "4Gi"
           ports:
             - containerPort: 8080
           env:
@@ -644,7 +644,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "1"
-              memory: "2048Mi"
+              memory: "2Gi"
           ports:
             - containerPort: 8080
           env:
@@ -720,7 +720,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "1"
-              memory: "2048Mi"
+              memory: "2Gi"
           ports:
             - containerPort: 5678
           env:
@@ -801,10 +801,10 @@ spec:
           resources:
             requests:
               cpu: "0.5"
-              memory: "1024Mi"
+              memory: "1Gi"
             limits:
               cpu: "1"
-              memory: "4096Mi"
+              memory: "4Gi"
           ports:
             - containerPort: 8111
           env:
@@ -901,7 +901,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "2"
-              memory: "2048Mi"
+              memory: "2Gi"
           ports:
             - containerPort: 80
             - containerPort: 81
@@ -999,7 +999,7 @@ spec:
               memory: "512Mi"
             limits:
               cpu: "1"
-              memory: "4096Mi"
+              memory: "4Gi"
           ports:
             - containerPort: 3000
           env:
@@ -1073,10 +1073,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "1"
-              memory: "2048Mi"
+              cpu: "0.5"
+              memory: "1Gi"
           ports:
             - containerPort: 8086
           env:
@@ -1161,10 +1161,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "1024Mi"
+              memory: "256Mi"
             limits:
               cpu: "1"
-              memory: "2048Mi"
+              memory: "512Mi"
           ports:
             - containerPort: 9090
           env:
@@ -1249,8 +1249,8 @@ spec:
               cpu: "0.1"
               memory: "128Mi"
             limits:
-              cpu: "0.5"
-              memory: "512Mi"
+              cpu: "0.25"
+              memory: "256Mi"
           ports:
             - containerPort: 9617
           env:
@@ -1315,8 +1315,8 @@ spec:
               cpu: "0.1"
               memory: "128Mi"
             limits:
-              cpu: "0.5"
-              memory: "512Mi"
+              cpu: "0.25"
+              memory: "256Mi"
           ports:
             - containerPort: 9617
           env:

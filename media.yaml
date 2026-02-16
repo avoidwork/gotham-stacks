@@ -50,10 +50,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "0.5"
-              memory: "1024Mi"
+              cpu: "0.25"
+              memory: "512Mi"
           ports:
             - containerPort: 9696
           env:
@@ -121,10 +121,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "1"
-              memory: "4096Mi"
+              cpu: "2"
+              memory: "4Gi"
           ports:
             - containerPort: 8686
           env:
@@ -204,10 +204,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "1"
-              memory: "4096Mi"
+              cpu: "2"
+              memory: "4Gi"
           ports:
             - containerPort: 7878
           env:
@@ -287,10 +287,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "2"
-              memory: "4096Mi"
+              cpu: "4"
+              memory: "4Gi"
           ports:
             - containerPort: 8080
           env:
@@ -364,10 +364,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
-              cpu: "1"
-              memory: "4096Mi"
+              cpu: "2"
+              memory: "4Gi"
           ports:
             - containerPort: 8989
           env:
@@ -447,10 +447,10 @@ spec:
           resources:
             requests:
               cpu: "0.1"
-              memory: "512Mi"
+              memory: "256Mi"
             limits:
               cpu: "1"
-              memory: "1024Mi"
+              memory: "1Gi"
           ports:
             - containerPort: 9091
             - containerPort: 51413
