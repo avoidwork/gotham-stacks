@@ -25,32 +25,6 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: npm-data-rwx
-  namespace: lab-stack
-spec:
-  accessModes: ["ReadWriteMany"]
-  storageClassName: nfs
-  resources:
-    requests:
-      storage: 5Gi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: npm-letsencrypt-rwx
-  namespace: lab-stack
-spec:
-  accessModes: ["ReadWriteMany"]
-  storageClassName: nfs
-  resources:
-    requests:
-      storage: 2Gi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: mysql-data-rwx
   namespace: lab-stack
 spec:
@@ -1008,17 +982,19 @@ spec:
             - name: DB_MYSQL_NAME
               value: "npm"
           volumeMounts:
-            - name: data
+            - name: npm-data
               mountPath: /data
-            - name: letsencrypt
+            - name: npm-letsencrypt
               mountPath: /etc/letsencrypt
       volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: npm-data-rwx
-        - name: letsencrypt
-          persistentVolumeClaim:
-            claimName: npm-letsencrypt-rwx
+        - name: npm-data
+          nfs:
+            server: 10.1.2.5
+            path: /docker/nginx-proxy-manager/data
+        - name: npm-letsencrypt
+          nfs:
+            server: 10.1.2.5
+            path: /docker/nginx-proxy-manager/letsencrypt
 
 ---
 apiVersion: v1
