@@ -1008,9 +1008,14 @@ spec:
             - name: DB_MYSQL_NAME
               value: "npm"
           volumeMounts:
+            - name: data
+              mountPath: /data
             - name: letsencrypt
               mountPath: /etc/letsencrypt
       volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: npm-data-rwx
         - name: letsencrypt
           persistentVolumeClaim:
             claimName: npm-letsencrypt-rwx
