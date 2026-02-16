@@ -22,17 +22,6 @@ metadata:
 # ------------------------------------------------
 # 2) Storage (PVCs)
 # ------------------------------------------------
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-data-rwx
-  namespace: lab-stack
-spec:
-  accessModes: ["ReadWriteMany"]
-  storageClassName: nfs
-  resources:
-    requests:
-      storage: 10Gi
 
 ---
 apiVersion: v1
@@ -59,6 +48,19 @@ spec:
   resources:
     requests:
       storage: 128Mi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data-rwx
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteMany"]
+  storageClassName: nfs
+  resources:
+    requests:
+      storage: 10Gi
 
 ---
 # ------------------------------------------------
