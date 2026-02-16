@@ -25,27 +25,27 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: npm-data-rwx
+  name: npm-data-rwo
   namespace: lab-stack
 spec:
-  accessModes: ["ReadWriteMany"]
-  storageClassName: nfs
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
   resources:
     requests:
-      storage: 5Gi
+      storage: 128Mi
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: npm-letsencrypt-rwx
+  name: npm-letsencrypt-rwo
   namespace: lab-stack
 spec:
-  accessModes: ["ReadWriteMany"]
-  storageClassName: nfs
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
   resources:
     requests:
-      storage: 2Gi
+      storage: 128Mi
 
 ---
 apiVersion: v1
@@ -971,6 +971,8 @@ spec:
                   key: MYSQL_NPM_PASSWORD
             - name: DB_MYSQL_NAME
               value: "npm"
+      nodeSelector:
+        kubernetes.io/hostname: "kube-1"
       containers:
         - name: nginx-proxy-manager
           image: jc21/nginx-proxy-manager:latest
@@ -1015,10 +1017,10 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: npm-data-rwx
+            claimName: npm-data-rwo
         - name: letsencrypt
           persistentVolumeClaim:
-            claimName: npm-letsencrypt-rwx
+            claimName: npm-letsencrypt-rwo
 
 ---
 apiVersion: v1
