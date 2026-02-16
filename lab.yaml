@@ -971,6 +971,8 @@ spec:
                   key: MYSQL_NPM_PASSWORD
             - name: DB_MYSQL_NAME
               value: "npm"
+      nodeSelector:
+        kubernetes.io/hostname: "kube-1"
       containers:
         - name: nginx-proxy-manager
           image: jc21/nginx-proxy-manager:latest
@@ -1014,13 +1016,11 @@ spec:
               mountPath: /etc/letsencrypt
       volumes:
         - name: npm-data
-          nfs:
-            server: 10.1.2.5
-            path: /docker/nginx-proxy-manager/data
+          persistentVolumeClaim:
+            claimName: npm-data-rwo
         - name: npm-letsencrypt
-          nfs:
-            server: 10.1.2.5
-            path: /docker/nginx-proxy-manager/letsencrypt
+          persistentVolumeClaim:
+            claimName: npm-letsencrypt-rwo
 
 ---
 apiVersion: v1
