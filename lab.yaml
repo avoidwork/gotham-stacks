@@ -992,10 +992,6 @@ spec:
           env:
             - name: TZ
               value: "America/Toronto"
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
             - name: SKIP_FILE_OWNERSHIP
               value: "1"
             - name: DB_MYSQL_HOST
