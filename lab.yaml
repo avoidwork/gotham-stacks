@@ -994,8 +994,6 @@ spec:
           env:
             - name: TZ
               value: "America/Toronto"
-            - name: SKIP_FILE_OWNERSHIP
-              value: "1"
             - name: DB_MYSQL_HOST
               value: "mysql"
             - name: DB_MYSQL_PORT
