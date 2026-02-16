@@ -22,8 +22,6 @@ metadata:
 # ------------------------------------------------
 # 2) Storage (PVCs)
 # ------------------------------------------------
-
----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
