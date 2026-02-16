@@ -1010,15 +1010,15 @@ spec:
             - name: DB_MYSQL_NAME
               value: "npm"
           volumeMounts:
-            - name: npm-data
+            - name: data
               mountPath: /data
-            - name: npm-letsencrypt
+            - name: letsencrypt
               mountPath: /etc/letsencrypt
       volumes:
-        - name: npm-data
+        - name: data
           persistentVolumeClaim:
             claimName: npm-data-rwo
-        - name: npm-letsencrypt
+        - name: letsencrypt
           persistentVolumeClaim:
             claimName: npm-letsencrypt-rwo
 
