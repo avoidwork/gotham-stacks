@@ -264,7 +264,8 @@ spec:
           - cluster.local
       containers:
         - name: redis
-          image: redis:latest
+          image: redis:7.2-alpine
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -670,8 +671,7 @@ spec:
       labels:
         app: open-webui
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+            dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -746,8 +746,7 @@ spec:
       labels:
         app: n8n
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+            dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -763,7 +762,8 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: docker.n8n.io/n8nio/n8n:latest
+          image: docker.n8n.io/n8nio/n8n:1.30.0
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -843,8 +843,7 @@ spec:
       labels:
         app: teamcity
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+            dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -856,7 +855,8 @@ spec:
           - cluster.local
       containers:
         - name: teamcity
-          image: jetbrains/teamcity-server:latest
+          image: jetbrains/teamcity-server:2024.1
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -988,7 +988,8 @@ spec:
         kubernetes.io/hostname: "kube-1"
       containers:
         - name: nginx-proxy-manager
-          image: jc21/nginx-proxy-manager:latest
+          image: jc21/nginx-proxy-manager:2.11.3
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -1335,8 +1336,7 @@ spec:
       labels:
         app: pihole-exporter-1
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+            dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -1401,8 +1401,7 @@ spec:
       labels:
         app: pihole-exporter-2
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+            dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
