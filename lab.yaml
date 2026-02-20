@@ -85,19 +85,11 @@ spec:
       labels:
         app: mysql
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: mysql
           image: mysql:9.6.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -252,19 +244,11 @@ spec:
       labels:
         app: redis
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: redis
-          image: redis:latest
+          image: redis:8.2.4-alpine
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -323,19 +307,11 @@ spec:
       labels:
         app: mongodb
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:7.0-ubi9
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -504,19 +480,11 @@ spec:
       labels:
         app: nginx
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: nginx
-          image: nginx:latest
+          image: nginx:1.29.5-alpine
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -585,19 +553,11 @@ spec:
       labels:
         app: searxng
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:latest
+          image: searxng/searxng:2026.2.20-93ac6ceb3
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -684,6 +644,7 @@ spec:
       containers:
         - name: open-webui
           image: ghcr.io/open-webui/open-webui:main
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -763,7 +724,8 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: docker.n8n.io/n8nio/n8n:latest
+          image: n8nio/n8n:1.123.21
+          imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
             runAsGroup: 0
@@ -856,7 +818,8 @@ spec:
           - cluster.local
       containers:
         - name: teamcity
-          image: jetbrains/teamcity-server:latest
+          image: jetbrains/teamcity-server:2025.11.3
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -939,16 +902,7 @@ spec:
       labels:
         app: nginx-proxy-manager
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       securityContext:
         runAsUser: 0
       initContainers:
@@ -988,7 +942,8 @@ spec:
         kubernetes.io/hostname: "kube-1"
       containers:
         - name: nginx-proxy-manager
-          image: jc21/nginx-proxy-manager:latest
+          image: jc21/nginx-proxy-manager:2.14.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.5"
@@ -1085,19 +1040,11 @@ spec:
       labels:
         app: grafana
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:latest
+          image: grafana/grafana:12.4.0-22081664032
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -1162,19 +1109,11 @@ spec:
       labels:
         app: influxdb
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: influxdb
-          image: influxdb:2
+          image: influxdb:2.8.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -1250,19 +1189,11 @@ spec:
       labels:
         app: prometheus
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: prometheus
-          image: prom/prometheus:latest
+          image: prom/prometheus:v3.9.1
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -1348,7 +1279,8 @@ spec:
           - cluster.local
       containers:
         - name: pihole-exporter-1
-          image: ekofr/pihole-exporter:latest
+          image: ekofr/pihole-exporter:v1.2.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -1414,7 +1346,8 @@ spec:
           - cluster.local
       containers:
         - name: pihole-exporter-2
-          image: ekofr/pihole-exporter:latest
+          image: ekofr/pihole-exporter:v1.2.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"

@@ -34,19 +34,11 @@ spec:
       labels:
         app: prowlarr
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: prowlarr
-          image: linuxserver/prowlarr:latest
+          image: linuxserver/prowlarr:2.3.0.5236
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -105,19 +97,11 @@ spec:
       labels:
         app: lidarr
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: lidarr
-          image: linuxserver/lidarr:latest
+          image: linuxserver/lidarr:3.1.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -188,19 +172,11 @@ spec:
       labels:
         app: radarr
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: radarr
-          image: linuxserver/radarr:latest
+          image: linuxserver/radarr:6.1.1-nightly
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -271,19 +247,11 @@ spec:
       labels:
         app: sabnzbd
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: sabnzbd
-          image: linuxserver/sabnzbd:latest
+          image: linuxserver/sabnzbd:4.5.5
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -348,19 +316,11 @@ spec:
       labels:
         app: sonarr
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: sonarr
-          image: linuxserver/sonarr:latest
+          image: linuxserver/sonarr:4.0.16
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
@@ -431,19 +391,11 @@ spec:
       labels:
         app: transmission
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - media-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: transmission
-          image: linuxserver/transmission:latest
+          image: linuxserver/transmission:4.1.0
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "0.1"
