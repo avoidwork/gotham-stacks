@@ -85,16 +85,7 @@ spec:
       labels:
         app: mysql
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: mysql
           image: mysql:9.6.0
@@ -252,16 +243,7 @@ spec:
       labels:
         app: redis
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: redis
           image: redis:7.2-alpine
@@ -324,16 +306,7 @@ spec:
       labels:
         app: mongodb
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:7.0-ubi9
@@ -505,16 +478,7 @@ spec:
       labels:
         app: nginx
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: nginx
           image: nginx:latest
@@ -586,16 +550,7 @@ spec:
       labels:
         app: searxng
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: searxng
           image: searxng/searxng:latest
@@ -1080,16 +1035,7 @@ spec:
       labels:
         app: grafana
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: grafana
           image: grafana/grafana:latest
@@ -1157,16 +1103,7 @@ spec:
       labels:
         app: influxdb
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: influxdb
           image: influxdb:2
@@ -1245,16 +1182,7 @@ spec:
       labels:
         app: prometheus
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       containers:
         - name: prometheus
           image: prom/prometheus:latest
