@@ -942,16 +942,7 @@ spec:
       labels:
         app: nginx-proxy-manager
     spec:
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 10.152.183.10
-          - 1.1.1.1
-          - 8.8.8.8
-        searches:
-          - lab-stack.svc.cluster.local
-          - svc.cluster.local
-          - cluster.local
+      dnsPolicy: ClusterFirst
       securityContext:
         runAsUser: 0
       initContainers:
