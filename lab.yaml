@@ -671,7 +671,8 @@ spec:
       labels:
         app: open-webui
     spec:
-            dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -746,7 +747,8 @@ spec:
       labels:
         app: n8n
     spec:
-            dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -843,7 +845,8 @@ spec:
       labels:
         app: teamcity
     spec:
-            dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -1336,7 +1339,8 @@ spec:
       labels:
         app: pihole-exporter-1
     spec:
-            dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10
@@ -1401,7 +1405,8 @@ spec:
       labels:
         app: pihole-exporter-2
     spec:
-            dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       dnsConfig:
         nameservers:
           - 10.152.183.10

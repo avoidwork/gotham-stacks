@@ -46,7 +46,7 @@ spec:
           - cluster.local
       containers:
         - name: prowlarr
-          image: linuxserver/prowlarr:1.23.0
+          image: linuxserver/prowlarr:2.1.5
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -118,7 +118,7 @@ spec:
           - cluster.local
       containers:
         - name: lidarr
-          image: linuxserver/lidarr:2.5.2
+          image: linuxserver/lidarr:2.14.5
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -202,7 +202,7 @@ spec:
           - cluster.local
       containers:
         - name: radarr
-          image: linuxserver/radarr:5.8.2
+          image: linuxserver/radarr:5.28.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -286,7 +286,7 @@ spec:
           - cluster.local
       containers:
         - name: sabnzbd
-          image: linuxserver/sabnzbd:4.2.1
+          image: linuxserver/sabnzbd:4.5.5
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -364,7 +364,7 @@ spec:
           - cluster.local
       containers:
         - name: sonarr
-          image: linuxserver/sonarr:4.0.5
+          image: linuxserver/sonarr:4.0.16
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -448,7 +448,7 @@ spec:
           - cluster.local
       containers:
         - name: transmission
-          image: linuxserver/transmission:4.0.6
+          image: linuxserver/transmission:4.1.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
