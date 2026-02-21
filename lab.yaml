@@ -310,7 +310,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: mongodb
-          image: mongodb/mongodb-community-server:7.0-ubi9
+          image: mongodb/mongodb-community-server:7.0.24-ubi9
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -383,7 +383,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mongodb/mongodb-community-server:7.0-ubi9
+          image: mongodb/mongodb-community-server:7.0.24-ubi9
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -914,12 +914,12 @@ spec:
               set -euo pipefail
 
               echo "Waiting for MySQL to accept connections..."
-              until mysqladmin ping -h "${DB_MYSQL_HOST}" -P "${DB_MYSQL_PORT}" --silent; do
+              until mysqladmin ping -h "${DB_MYSQL_HOST}" --port="${DB_MYSQL_PORT}" --silent; do
                 sleep 2
               done
 
               echo "Waiting for mysql-npm-init effects (db/user) to be ready..."
-              until mysql -h "${DB_MYSQL_HOST}" -P "${DB_MYSQL_PORT}" -u"${DB_MYSQL_USER}" -p"${DB_MYSQL_PASSWORD}" -e "USE \`${DB_MYSQL_NAME}\`;" >/dev/null 2>&1; do
+              until mysql -h "${DB_MYSQL_HOST}" --port="${DB_MYSQL_PORT}" -u"${DB_MYSQL_USER}" -p"${DB_MYSQL_PASSWORD}" -e "USE \`${DB_MYSQL_NAME}\`;" >/dev/null 2>&1; do
                 sleep 2
               done
 
