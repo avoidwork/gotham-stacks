@@ -11,6 +11,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: media-stack
+
 ---
 # --------------------------------------------------------------
 # 2️⃣ Apps (Deployment followed by its Service)
