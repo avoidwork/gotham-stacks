@@ -1189,7 +1189,8 @@ spec:
       labels:
         app: prometheus
     spec:
-      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: prometheus
           image: prom/prometheus:v3.9.1
