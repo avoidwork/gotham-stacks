@@ -37,7 +37,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: prowlarr
-          image: linuxserver/prowlarr:2.3.0.5236
+          image: linuxserver/prowlarr:version-2.3.0.5236
           imagePullPolicy: IfNotPresent
           resources:
             requests:
