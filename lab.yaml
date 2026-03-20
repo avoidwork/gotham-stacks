@@ -661,6 +661,8 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Toronto"
+            - name: OPENAI_API_BASE_URL
+              value: "http://10.1.2.60:8000/v1"
           volumeMounts:
             - name: open-webui-data
               mountPath: /app/backend/data
