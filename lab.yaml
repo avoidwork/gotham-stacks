@@ -478,7 +478,16 @@ spec:
                  sleep 2
                done
 
-               MONGO_HOST="mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017"
+               echo "Getting primary host..."
+               PRIMARY_HOST="$(mongosh "mongodb://mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017/admin?directConnection=true" --quiet --eval '
+                 const st = rs.status();
+                 if (!st.ok) { throw new Error("Replica set not ready"); }
+                 const p = st.members.find(m => m.stateStr === "PRIMARY");
+                 if (!p) { throw new Error("No PRIMARY found"); }
+                 print(p.name);
+               ')"
+
+               MONGO_HOST="${PRIMARY_HOST}"
                MONGO_URI="mongodb://${MONGO_HOST}/admin?directConnection=true"
 
               echo "Creating arc database and user (idempotent)..."
