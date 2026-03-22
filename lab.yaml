@@ -388,15 +388,15 @@ spec:
           args:
             - |
               set -euo pipefail
-
+              
               MONGO_HOST="mongodb-0.mongodb-headless.lab-stack.svc.cluster.local:27017"
               MONGO_URI="mongodb://${MONGO_HOST}/admin?directConnection=true"
-
+              
               echo "Waiting for mongodb-0 to accept connections..."
               until mongosh "${MONGO_URI}" --quiet --eval "db.adminCommand({ ping: 1 }).ok" >/dev/null 2>&1; do
                 sleep 2
               done
-
+              
               echo "Checking whether replica set is initialized..."
               if ! mongosh "${MONGO_URI}" --quiet --eval "rs.status().ok" >/dev/null 2>&1; then
                 echo "Initializing replica set..."
@@ -413,12 +413,12 @@ spec:
               else
                 echo "Replica set already initialized."
               fi
-
+              
               echo "Waiting for PRIMARY..."
               until mongosh "${MONGO_URI}" --quiet --eval "rs.status().ok" 2>/dev/null | grep -q "1"; do
                 sleep 2
               done
-
+              
               echo "Ensuring admin user exists..."
               
               PRIMARY_HOST="$(mongosh "${MONGO_URI}" --quiet --eval '
@@ -427,7 +427,7 @@ spec:
                 if (!p) { throw new Error("No PRIMARY found yet"); }
                 print(p.name); // e.g. "mongodb-1.mongodb-headless.lab-stack.svc.cluster.local:27017"
               ')"
-            
+              
               MONGO_HOST="${PRIMARY_HOST}"
               MONGO_URI="mongodb://${MONGO_HOST}/admin?directConnection=true"
               
@@ -446,7 +446,25 @@ spec:
                   print('Admin user created.');
                 }
               "
-
+              
+              echo "Creating arc database and user (idempotent)..."
+              
+              mongosh "${MONGO_URI}" --quiet --eval "
+                const arcDb = db.getSiblingDB('arc');
+                const user = arcDb.getUser('arc');
+                if (user) {
+                  arcDb.updateUser('arc', { pwd: '${ARC_DB_PASSWORD}' });
+                  print('Arc user already exists.');
+                } else {
+                  arcDb.createUser({
+                    user: 'arc',
+                    pwd: '${ARC_DB_PASSWORD}',
+                    roles: [ { role: 'readWrite', db: 'arc' } ]
+                  });
+                  print('Arc user created.');
+                }
+              "
+              
               echo "Done."
           env:
             - name: MONGO_INITDB_ROOT_PASSWORD
@@ -454,7 +472,11 @@ spec:
                 secretKeyRef:
                   name: mongodb
                   key: MONGO_INITDB_ROOT_PASSWORD
-
+            - name: ARC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: arc
+                  key: ARC_DB_PASSWORD
 ---
 # ------------------------------------------------
 # 4) Platform apps

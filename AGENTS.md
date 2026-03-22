@@ -1,36 +1,36 @@
 # Agent Instructions for Gotham Stacks Kubernetes Repository
 
-This file provides guidance for AI agents working with the Gotham Stacks repository, which contains Helm charts for Kubernetes namespaces.
+This file provides guidance for AI agents working with the Gotham Stacks repository, which contains Kubernetes manifests for namespaces.
 
 ## Repository Structure
 
-The repository contains two Helm charts:
-- `charts/lab-stack/` - For the lab environment namespace
-- `charts/media-stack/` - For the media environment namespace
+The repository contains two stack manifest files:
+- `lab.yaml` - For the lab environment namespace
+- `media.yaml` - For the media environment namespace
 
-Each chart creates a dedicated namespace and deploys related applications as defined in the bundled manifests (referred to as "stacks" in README.md).
+Each file creates a dedicated namespace and deploys related applications (referred to as "stacks" in README.md).
 
 ## Standard Operations
 
 ### Installing Stacks
-To install a stack using Helm:
+To install a stack using kubectl:
 ```shell
-helm install lab-stack ./charts/lab-stack
-helm install media-stack ./charts/media-stack
+kubectl apply -f lab.yaml
+kubectl apply -f media.yaml
 ```
 
 ### Upgrading Stacks
-To upgrade an existing release:
+To update an existing stack:
 ```shell
-helm upgrade lab-stack ./charts/lab-stack
-helm upgrade media-stack ./charts/media-stack
+kubectl apply -f lab.yaml
+kubectl apply -f media.yaml
 ```
 
 ### Uninstalling Stacks
 To remove a stack:
 ```shell
-helm uninstall lab-stack
-helm uninstall media-stack
+kubectl delete -f lab.yaml
+kubectl delete -f media.yaml
 ```
 
 ### Viewing Deployed Resources
@@ -40,18 +40,12 @@ kubectl -n lab-stack get all
 kubectl -n media-stack get all
 ```
 
-## Chart Customization
+## Manifest Customization
 
 Values can be customized by:
-1. Editing the `values.yaml` file in each chart directory
-2. Using `--set` flags during install/upgrade:
-   ```shell
-   helm install lab-stack ./charts/lab-stack --set persistence.enabled=false
-   ```
-3. Creating custom values files:
-   ```shell
-   helm install lab-stack ./charts/lab-stack -f my-lab-values.yaml
-   ```
+1. Editing the YAML files directly (`lab.yaml` or `media.yaml`)
+2. Creating custom overlay files and applying them with `kubectl apply -f`
+3. Using tools like `kustomize` or `helm` if preferred (though the manifests are designed to be applied directly)
 
 ## Important Notes
 
