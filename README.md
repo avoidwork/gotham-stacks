@@ -91,6 +91,7 @@ kubectl -n lab-stack create secret generic mongodb --from-literal=MONGO_INITDB_R
 kubectl -n lab-stack create secret generic influxdb --from-literal=DOCKER_INFLUXDB_INIT_PASSWORD="<your-influxdb-password>"
 kubectl -n lab-stack create secret generic teamcity --from-literal=TEAMCITY_DB_PASSWORD="<your-teamcity-db-password>"
 kubectl -n lab-stack create secret generic pihole --from-literal=PIHOLE_PASSWORD="<your-pihole-password>"
+kubectl -n lab-stack create secret generic arc --from-literal=ARC_DB_PASSWORD="<your-arc-db-password>"
 ```
 
 If a required secret is missing, the related pods will typically fail to start. Troubleshoot with:
