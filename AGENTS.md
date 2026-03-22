@@ -50,14 +50,14 @@ Values can be customized by:
 ## Important Notes
 
 ### Storage
-- Charts use PersistentVolumeClaims (PVCs) by default
+- Manifests use PersistentVolumeClaims (PVCs) by default
 - Ensure the referenced StorageClass exists in your cluster
-- For NFS-mounted volumes (if enabled), update the server address in values.yaml to match your NAS/NFS server
+- For NFS-mounted volumes (if enabled), update the server address in the YAML files to match your NAS/NFS server
 
 ### Secrets
-- Some charts require Kubernetes Secrets to be created before installation
+- Some manifests require Kubernetes Secrets to be created before installation
 - See README.md for specific secret requirements per application
-- Create secrets in the target namespace before installing the chart
+- Create secrets in the target namespace before applying the manifest
 
 ### Networking
 - Services are configured as NodePort by default for homelab accessibility
