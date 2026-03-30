@@ -37,7 +37,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: prowlarr
-          image: linuxserver/prowlarr:version-2.3.0.5236
+          image: linuxserver/prowlarr:nightly-version-2.3.5.5323
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -100,7 +100,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: lidarr
-          image: linuxserver/lidarr:3.1.0
+          image: linuxserver/lidarr:nightly-version-3.1.2.4939
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -175,7 +175,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: radarr
-          image: linuxserver/radarr:6.1.1-nightly
+          image: linuxserver/radarr:nightly-version-6.1.2.10361
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -319,7 +319,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: sonarr
-          image: linuxserver/sonarr:4.0.16
+          image: linuxserver/sonarr:4.0.17
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -394,7 +394,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: transmission
-          image: linuxserver/transmission:4.1.0
+          image: linuxserver/transmission:4.1.1
           imagePullPolicy: IfNotPresent
           resources:
             requests:
