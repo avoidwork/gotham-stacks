@@ -247,7 +247,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: redis
-          image: redis:8.2.4-alpine3.22
+          image: redis:8.6.2-alpine
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -310,7 +310,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: mongodb
-          image: mongodb/mongodb-community-server:7.0-ubi9
+          image: mongodb/mongodb-community-server:8.2.6-ubi9
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -383,7 +383,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mongodb/mongodb-community-server:7.0-ubi9
+          image: mongodb/mongodb-community-server:8.2.6-ubi9
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -467,7 +467,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mongodb/mongodb-community-server:7.0-ubi9
+          image: mongodb/mongodb-community-server:8.2.6-ubi9
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -568,7 +568,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: nginx
-          image: nginx:1.29.5-alpine
+          image: nginx:1.29.7-alpine
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -641,7 +641,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.2.20-93ac6ceb3
+          image: searxng/searxng:2026.3.29-7ac4ff39f
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -811,7 +811,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:1.123.21
+          image: n8nio/n8n:2.15.0
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
@@ -1130,7 +1130,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:12.4.0-22081664032
+          image: grafana/grafana:13.0.0-ubuntu
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1280,7 +1280,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.9.1
+          image: prom/prometheus:v3.10.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
