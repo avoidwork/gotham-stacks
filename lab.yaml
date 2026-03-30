@@ -1466,3 +1466,82 @@ spec:
     - protocol: TCP
       port: 9617
       targetPort: 9617
+
+---
+# ------------------------------------------------
+# OpenClaw
+# ------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openclaw
+  namespace: lab-stack
+  labels:
+    app: openclaw
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openclaw
+  template:
+    metadata:
+      labels:
+        app: openclaw
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      dnsConfig:
+        nameservers:
+          - 10.152.183.10
+          - 1.1.1.1
+          - 8.8.8.8
+        searches:
+          - lab-stack.svc.cluster.local
+          - svc.cluster.local
+          - cluster.local
+      containers:
+        - name: openclaw
+          image: alpine/openclaw:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+            - name: VLLM_BASE_URL
+              value: "http://10.1.2.60:8000/v1"
+          volumeMounts:
+            - name: openclaw-data
+              mountPath: /app/data
+      volumes:
+        - name: openclaw-data
+          nfs:
+            server: 10.1.2.5
+            path: /docker/openclaw
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openclaw
+  namespace: lab-stack
+spec:
+  selector:
+    app: openclaw
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 31084
