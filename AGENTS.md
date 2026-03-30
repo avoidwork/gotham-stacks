@@ -8,7 +8,7 @@ This repository contains prebuilt Kubernetes "stack" manifests for a homelab env
 
 - **`lab.yaml`** — Lab stack (databases, platform tools, monitoring, utilities)
   - Namespace: `lab-stack`
-  - Apps: MySQL, Redis, MongoDB, nginx, SearXNG, Open WebUI, n8n, TeamCity, Nginx Proxy Manager, Grafana, InfluxDB, Prometheus, Pi-hole exporters, OpenClaw (AI coding assistant with vLLM integration)
+  - Apps: MySQL, Redis, MongoDB, nginx, SearXNG, Open WebUI, n8n, TeamCity, Nginx Proxy Manager, Grafana, InfluxDB, Prometheus, Pi-hole exporters, OpenClaw (AI agent gateway for WhatsApp, Telegram, Discord, iMessage)
 
 - **`media.yaml`** — Media stack (media management and downloading)
   - Namespace: `media-stack`

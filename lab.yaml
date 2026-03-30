@@ -1511,7 +1511,7 @@ spec:
               cpu: "2"
               memory: "4Gi"
           ports:
-            - containerPort: 3000
+            - containerPort: 18789
           env:
             - name: PUID
               value: "1000"
@@ -1519,13 +1519,13 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Toronto"
-            - name: VLLM_BASE_URL
-              value: "http://10.1.2.60:8000/v1"
+            - name: OPENCLAW_GATEWAY_BIND
+              value: "lan"
           volumeMounts:
-            - name: openclaw-data
-              mountPath: /app/data
+            - name: openclaw-config
+              mountPath: /home/node/.openclaw
       volumes:
-        - name: openclaw-data
+        - name: openclaw-config
           nfs:
             server: 10.1.2.5
             path: /docker/openclaw
@@ -1542,6 +1542,6 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: 18789
+      targetPort: 18789
       nodePort: 31084
