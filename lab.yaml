@@ -1553,7 +1553,7 @@ spec:
                   key: OPENCLAW_GATEWAY_TOKEN
           volumeMounts:
             - name: openclaw-config
-              mountPath: /home/node/.openclaw
+              mountPath: /home/openclaw/.openclaw
       volumes:
         - name: openclaw-config
           nfs:
