@@ -1525,6 +1525,16 @@ spec:
               value: "http://10.1.2.60:8000/v1"
             - name: OPENAI_API_KEY
               value: "local"
+            - name: ZOHO_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: ZOHO_EMAIL
+            - name: ZOHO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: ZOHO_PASSWORD
           volumeMounts:
             - name: openclaw-config
               mountPath: /home/node/.openclaw
