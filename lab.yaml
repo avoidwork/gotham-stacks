@@ -1535,7 +1535,7 @@ spec:
             - name: OPENAI_API_KEY
               value: "local"
             - name: SEARXNG_BASE_URL
-              value: "https://searxng.avoidwork.com"
+              value: "http://10.1.2.50:31081"
             - name: ZOHO_EMAIL
               valueFrom:
                 secretKeyRef:
