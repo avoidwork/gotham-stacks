@@ -1499,11 +1499,10 @@ spec:
           - lab-stack.svc.cluster.local
           - svc.cluster.local
           - cluster.local
-      containers:
-        - name: openclaw
-          image: alpine/openclaw:latest
-          imagePullPolicy: IfNotPresent
-          command: [ "/bin/sh", "-c" ]
+      initContainers:
+        - name: init-packages
+          image: alpine:3.21
+          command: ["/bin/sh", "-c"]
           args:
             - |
               apk add --no-cache python3 cronie jq curl git tree htop sqlite-libs rsync tmux openssh-client coreutils ffmpeg imagemagick
@@ -1512,6 +1511,10 @@ spec:
               service crond start
               echo "Starting openclaw"
               exec openclaw gateway run
+      containers:
+        - name: openclaw
+          image: alpine/openclaw:latest
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "2"
