@@ -664,7 +664,7 @@ spec:
             - name: DATA_PATH
               value: "/var/cache/searxng"
             - name: SEARXNG_PORT
-              value: 8080
+              value: "8080"
             - name: SEARXNG_BASE_URL
               value: "https://searxng.avoidwork.com"
           volumeMounts:
