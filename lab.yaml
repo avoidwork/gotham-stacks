@@ -667,6 +667,11 @@ spec:
               value: "8080"
             - name: SEARXNG_BASE_URL
               value: "https://searxng.avoidwork.com"
+            - name: SEARXNG_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: searxng
+                  key: SEARXNG_SECRET
           volumeMounts:
             - name: config
               mountPath: /etc/searxng
