@@ -1509,8 +1509,7 @@ spec:
               echo "Packages installed successfully"
               echo "Starting crond"
               service crond start
-              echo "Starting openclaw"
-              exec openclaw gateway run
+              echo "Started crond"
       containers:
         - name: openclaw
           image: alpine/openclaw:latest
