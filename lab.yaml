@@ -1501,7 +1501,7 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: avoidwork/openclaw:latest
+          image: alpine/openclaw:latest
           imagePullPolicy: IfNotPresent
           resources:
             requests:
