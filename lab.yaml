@@ -1511,6 +1511,11 @@ spec:
         - name: openclaw
           image: alpine/openclaw:latest
           imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              service crond start
+              exec openclaw gateway run
           resources:
             requests:
               cpu: "2"
