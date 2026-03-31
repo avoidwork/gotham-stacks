@@ -1508,7 +1508,7 @@ spec:
               apk add --no-cache python3 cronie jq curl git tree htop sqlite-libs rsync tmux openssh-client coreutils ffmpeg imagemagick
               echo "Packages installed successfully"
               echo "Starting crond"
-              rc-service crond start
+              /usr/sbin/crond
               echo "Started crond"
       containers:
         - name: openclaw
