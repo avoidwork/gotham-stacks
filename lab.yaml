@@ -1499,17 +1499,30 @@ spec:
           - lab-stack.svc.cluster.local
           - svc.cluster.local
           - cluster.local
+      initContainers:
+        - name: init-packages
+          image: alpine:3.21
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apk add --no-cache python3 cronie jq curl git tree htop sqlite-libs rsync tmux openssh-client coreutils ffmpeg imagemagick
+              echo "Packages installed successfully"
       containers:
         - name: openclaw
           image: alpine/openclaw:latest
           imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              crond -l 2 -d 0 &
+              exec openclaw gateway
           resources:
             requests:
-              cpu: "0.5"
-              memory: "512Mi"
-            limits:
               cpu: "2"
-              memory: "4Gi"
+              memory: "2Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
           ports:
             - containerPort: 18789
           env:
