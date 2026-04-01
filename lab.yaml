@@ -1510,8 +1510,8 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: avoidwork/openclaw:latest
-          imagePullPolicy: Always
+          image: alpine/openclaw:latest
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               cpu: "2"
