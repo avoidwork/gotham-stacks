@@ -1536,6 +1536,12 @@ spec:
               value: "local"
             - name: SEARXNG_BASE_URL
               value: "http://10.1.2.50:31081"
+            - name: LIDARR_BASE_URL
+              value: "http://10.1.2.50:30686"
+            - name: RADARR_BASE_URL
+              value: "http://10.1.2.50:30778"
+            - name: SONARR_BASE_URL
+              value: "http://10.1.2.50:30898"
             - name: ZOHO_EMAIL
               valueFrom:
                 secretKeyRef:
@@ -1551,6 +1557,21 @@ spec:
                 secretKeyRef:
                   name: openclaw
                   key: OPENCLAW_GATEWAY_TOKEN
+            - name: LIDARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: LIDARR_API_KEY
+            - name: RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: RADARR_API_KEY
+            - name: SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: SONARR_API_KEY
           volumeMounts:
             - name: openclaw-config
               mountPath: /home/node/.openclaw
