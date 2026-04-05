@@ -1577,6 +1577,16 @@ spec:
                 secretKeyRef:
                   name: openclaw
                   key: NZBPLANET_API_KEY
+            - name: OPENCODE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: OPENCODE_USERNAME
+            - name: OPENCODE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: OPENCODE_PASSWORD
           volumeMounts:
             - name: openclaw-config
               mountPath: /home/node/.openclaw
