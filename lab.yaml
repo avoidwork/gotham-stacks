@@ -1542,6 +1542,8 @@ spec:
               value: "http://10.1.2.50:30778"
             - name: SONARR_BASE_URL
               value: "http://10.1.2.50:30898"
+            - name: OPENCODE_HOST
+              value: "10.1.2.8"
             - name: ZOHO_EMAIL
               valueFrom:
                 secretKeyRef:
