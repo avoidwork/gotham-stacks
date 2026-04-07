@@ -1510,7 +1510,7 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: ghcr.io/openclaw/openclaw:latest
+          image: ghcr.io/openclaw/openclaw:2026.4.5
           imagePullPolicy: IfNotPresent
           resources:
             requests:
