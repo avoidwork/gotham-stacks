@@ -1589,6 +1589,11 @@ spec:
                 secretKeyRef:
                   name: openclaw
                   key: OPENCODE_PASSWORD
+            - name: TMDB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openclaw
+                  key: TMDB_API_KEY
           volumeMounts:
             - name: openclaw-config
               mountPath: /home/node/.openclaw
