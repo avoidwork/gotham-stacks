@@ -1139,7 +1139,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.0.0-ubuntu
+          image: grafana/grafana:13.0.0-24058232110
           imagePullPolicy: IfNotPresent
           resources:
             requests:
