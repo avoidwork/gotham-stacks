@@ -310,7 +310,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: mongodb
-          image: mongodb/mongodb-community-server:8.2.6-ubi9
+          image: mongodb/mongodb-community-server:8.2.20-ubi9
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -383,7 +383,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mongodb/mongodb-community-server:8.2.6-ubi9
+          image: mongodb/mongodb-community-server:8.2.20-ubi9
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -467,7 +467,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mongodb/mongodb-community-server:8.2.6-ubi9
+          image: mongodb/mongodb-community-server:8.2.20-ubi9
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -568,7 +568,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: nginx
-          image: nginx:1.29.7-alpine
+          image: nginx:1.29.8-alpine
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -641,7 +641,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.3.29-7ac4ff39f
+          image: searxng/searxng:2026.4.7-08ef7a63d
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1139,7 +1139,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.0.0-24058232110
+          image: grafana/grafana:13.0.0-24111282511
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1510,7 +1510,7 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: ghcr.io/openclaw/openclaw:2026.4.5
+          image: ghcr.io/openclaw/openclaw:2026.4.8
           imagePullPolicy: IfNotPresent
           resources:
             requests:
