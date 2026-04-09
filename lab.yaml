@@ -883,7 +883,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.0.0-24111282511
+          image: grafana/grafana:13.0.0-24165874688
           imagePullPolicy: IfNotPresent
           resources:
             requests:
