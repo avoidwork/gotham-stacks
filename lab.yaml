@@ -952,7 +952,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: influxdb
-          image: influxdb:2.8.0
+          image: influxdb:3.9.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1033,7 +1033,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.10.0
+          image: prom/prometheus:v3.11.1
           imagePullPolicy: IfNotPresent
           resources:
             requests:
