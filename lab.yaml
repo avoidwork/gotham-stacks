@@ -564,7 +564,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:2.15.0
+          image: n8nio/n8n:2.16.0
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
@@ -883,7 +883,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.0.0-24165874688
+          image: grafana/grafana:13.1.0-24220292042
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1033,7 +1033,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.10.0
+          image: prom/prometheus:v3.11.1
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1254,7 +1254,7 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: ghcr.io/openclaw/openclaw:2026.4.8
+          image: ghcr.io/openclaw/openclaw:v2026.4.9
           imagePullPolicy: IfNotPresent
           resources:
             requests:
