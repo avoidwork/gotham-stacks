@@ -385,7 +385,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.4.7-08ef7a63d
+          image: searxng/searxng:2026.4.10-7737a0da1
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -883,7 +883,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.1.0-24220292042
+          image: grafana/grafana:13.1.0-24243827787
           imagePullPolicy: IfNotPresent
           resources:
             requests:
