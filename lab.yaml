@@ -225,6 +225,96 @@ spec:
 
 ---
 # ------------------------------------------------
+# MongoDB
+# ------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-data-rwo
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: lab-stack
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      dnsPolicy: ClusterFirst
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - kube-1
+      containers:
+        - name: mongodb
+          image: mongo:8.0.6
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "0.1"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "root"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data-rwo
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: lab-stack
+spec:
+  selector:
+    app: mongodb
+  type: NodePort
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+      nodePort: 31701
+
+---
+# ------------------------------------------------
 # Redis
 # ------------------------------------------------
 apiVersion: apps/v1
