@@ -286,6 +286,179 @@ spec:
 
 ---
 # ------------------------------------------------
+# MongoDB
+# ------------------------------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-data-0
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-data-1
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-data-2
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: lab-stack
+  labels:
+    app: mongodb
+spec:
+  serviceName: mongodb
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: mongodb
+          image: mongodb/mongodb-community-server:8.0.20-ubuntu2204-slim
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          ports:
+            - containerPort: 27017
+          command:
+            - mongod
+            - "--bind_ip_all"
+            - "--replSet"
+            - rs0
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data-0
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: lab-stack
+  labels:
+    app: mongodb
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-nodeport
+  namespace: lab-stack
+spec:
+  selector:
+    app: mongodb
+  type: NodePort
+  ports:
+    - name: mongodb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+      nodePort: 31017
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-replicaset-init
+  namespace: lab-stack
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: init
+          image: mongodb/mongodb-community-server:8.0.20-ubuntu2204-slim
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for MongoDB pods to be ready..."
+              for i in 0 1 2; do
+                until mongosh --host mongodb-$i.mongodb.lab-stack.svc.cluster.local:27017 --eval "db.runCommand({ping:1})" >/dev/null 2>&1; do
+                  echo "Waiting for mongodb-$i to be ready..."
+                  sleep 5
+                done
+                echo "mongodb-$i is ready"
+              done
+
+              echo "Initializing replica set..."
+              mongosh --host mongodb-0.mongodb.lab-stack.svc.cluster.local:27017 <<EOF
+              rs.initiate({
+                _id: "rs0",
+                members: [
+                  { _id: 0, host: "mongodb-0.mongodb.lab-stack.svc.cluster.local:27017" },
+                  { _id: 1, host: "mongodb-1.mongodb.lab-stack.svc.cluster.local:27017" },
+                  { _id: 2, host: "mongodb-2.mongodb.lab-stack.svc.cluster.local:27017" }
+                ]
+              })
+              EOF
+
+              echo "Waiting for replica set to elect a primary..."
+              sleep 10
+              until mongosh --host mongodb-0.mongodb.lab-stack.svc.cluster.local:27017 --eval "rs.isMaster().ismaster" | grep -q "true"; do
+                echo "Waiting for primary election..."
+                sleep 5
+              done
+
+              echo "Replica set initialized successfully"
+              echo "Primary: $(mongosh --host mongodb-0.mongodb.lab-stack.svc.cluster.local:27017 --quiet --eval "rs.isMaster().primary")"
+
+---
+# ------------------------------------------------
 # 4) Platform apps
 # ------------------------------------------------
 
