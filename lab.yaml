@@ -304,6 +304,19 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: mongodb-data-1
+  namespace: lab-stack
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: mongodb-data-2
   namespace: lab-stack
 spec:
@@ -333,13 +346,6 @@ spec:
         app: mongodb
     spec:
       dnsPolicy: ClusterFirst
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app: mongodb
-              topologyKey: kubernetes.io/hostname
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:8.0.20-ubuntu2204-slim
@@ -361,15 +367,10 @@ spec:
           volumeMounts:
             - name: mongodb-data
               mountPath: /data/db
-  volumeClaimTemplates:
-    - metadata:
-        name: mongodb-data
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: microk8s-hostpath
-        resources:
-          requests:
-            storage: 20Gi
+      volumes:
+        - name: mongodb-data
+          persistentVolumeClaim:
+            claimName: mongodb-data-0
 
 ---
 apiVersion: v1
