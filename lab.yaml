@@ -475,7 +475,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.4.11-9e08a6771
+          image: searxng/searxng:2026.4.13-ee66b070a
           imagePullPolicy: IfNotPresent
           resources:
             requests:
