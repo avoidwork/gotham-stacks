@@ -269,7 +269,7 @@ spec:
                       - kube-1
       containers:
         - name: mongodb
-          image: mongo:8.2.6-noble
+          image: mongo:8.2.7-noble
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -402,7 +402,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: nginx
-          image: nginx:1.29.8-alpine
+          image: nginx:1.30.0-alpine
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -475,7 +475,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.4.13-ee66b070a
+          image: searxng/searxng:2026.4.17-e8299a4c3
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -654,7 +654,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:2.16.0
+          image: n8nio/n8n:2.17.2
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
@@ -748,7 +748,7 @@ spec:
           - cluster.local
       containers:
         - name: teamcity
-          image: jetbrains/teamcity-server:2025.11.3
+          image: jetbrains/teamcity-server:2025.11.4
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -973,7 +973,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.1.0-24243827787
+          image: grafana/grafana:13.1.0-24541505453
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1123,7 +1123,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: prometheus
-          image: prom/prometheus:v3.11.1
+          image: prom/prometheus:v3.11.2
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -1344,7 +1344,7 @@ spec:
           - cluster.local
       containers:
         - name: openclaw
-          image: ghcr.io/openclaw/openclaw:2026.4.14
+          image: ghcr.io/openclaw/openclaw:2026.4.15
           imagePullPolicy: IfNotPresent
           resources:
             requests:
