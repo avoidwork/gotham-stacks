@@ -88,7 +88,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: mysql
-          image: mysql:9.6.0
+          image: mysql:9.7.0
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -143,7 +143,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mysql:9.6.0
+          image: mysql:9.7.0
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -190,7 +190,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: init
-          image: mysql:9.6.0
+          image: mysql:9.7.0
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -475,7 +475,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.4.17-e8299a4c3
+          image: searxng/searxng:2026.4.22-74f1ca203
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -654,7 +654,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:2.17.3-amd64
+          image: n8nio/n8n:2.17.5-amd64
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
@@ -837,7 +837,7 @@ spec:
         runAsUser: 0
       initContainers:
         - name: wait-for-mysql-npm-init
-          image: mysql:9.6.0
+          image: mysql:9.7.0
           command: ["/bin/bash", "-lc"]
           args:
             - |
@@ -973,7 +973,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.1.0-24541505453
+          image: grafana/grafana:13.1.0-24810162751
           imagePullPolicy: IfNotPresent
           resources:
             requests:
