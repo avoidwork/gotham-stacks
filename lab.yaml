@@ -973,7 +973,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: grafana
-          image: grafana/grafana:13.1.0-24810162751
+          image: grafana/grafana:13.1.0-24866141508
           imagePullPolicy: IfNotPresent
           resources:
             requests:
