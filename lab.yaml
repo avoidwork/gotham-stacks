@@ -654,7 +654,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:2.18.2-amd64
+          image: n8nio/n8n:2.18.3-f32cb56-amd64
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
