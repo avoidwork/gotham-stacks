@@ -475,7 +475,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: searxng
-          image: searxng/searxng:2026.4.22-74f1ca203
+          image: searxng/searxng:2026.4.24-a7ac696b4
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -654,7 +654,7 @@ spec:
         runAsNonRoot: false
       containers:
         - name: n8n
-          image: n8nio/n8n:2.18.2-amd64
+          image: n8nio/n8n:2.18.3-amd64
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
