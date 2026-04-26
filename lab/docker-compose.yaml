@@ -317,7 +317,8 @@ services:
     image: prom/prometheus:v3.11.2
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "9090:9090"
     environment:
       - PUID=1000
       - PGID=1000
@@ -345,7 +346,6 @@ services:
     image: ekofr/pihole-exporter:v1.2.0
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
     environment:
       - PIHOLE_HOSTNAME=10.1.2.2
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
@@ -365,7 +365,6 @@ services:
     image: ekofr/pihole-exporter:v1.2.0
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
     environment:
       - PIHOLE_HOSTNAME=10.1.2.3
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
