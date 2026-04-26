@@ -135,6 +135,8 @@ services:
     volumes:
       - /mnt/docker/searxng/config:/etc/searxng
       - /mnt/docker/searxng/data:/var/cache/searxng
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -153,6 +155,8 @@ services:
     restart: unless-stopped
     ports:
       - "8082:8080"
+    networks:
+      - stacks-net
     environment:
       - PUID=1000
       - PGID=1000
@@ -179,6 +183,8 @@ services:
     ports:
       - "5678:5678"
     user: "0:0"
+    networks:
+      - stacks-net
     environment:
       - NODES_EXCLUDE=[]
       - N8N_RESTRICT_FILE_ACCESS_TO=/mnt/translate
