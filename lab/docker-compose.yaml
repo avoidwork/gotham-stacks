@@ -95,8 +95,6 @@ services:
     image: nginx:1.30.0-alpine
     pull_policy: if_not_present
     restart: unless-stopped
-    ports:
-      - "80:80"
     environment:
       - PUID=1000
       - PGID=1000
