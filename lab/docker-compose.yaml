@@ -148,7 +148,8 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "8082:8080"
     environment:
       - PUID=1000
       - PGID=1000
@@ -172,7 +173,8 @@ services:
     image: n8nio/n8n:2.18.3-amd64
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "5678:5678"
     user: "0:0"
     environment:
       - NODES_EXCLUDE=[]
@@ -200,7 +202,8 @@ services:
     image: jetbrains/teamcity-server:2025.11.4
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "8111:8111"
     environment:
       - TEAMCITY_ENV=container
       - TZ=America/Toronto
@@ -384,8 +387,8 @@ services:
     image: ghcr.io/openclaw/openclaw:2026.4.22
     pull_policy: if_not_present
     restart: unless-stopped
-    networks:
-      - gotham-net
+    ports:
+      - "18789:18789"
     environment:
       - PUID=1000
       - PGID=1000
@@ -424,6 +427,3 @@ volumes:
   npm-data:
   npm-letsencrypt:
 
-networks:
-  gotham-net:
-    driver: bridge
