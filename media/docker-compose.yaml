@@ -15,7 +15,7 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/prowlarr:/config
+      - /mnt/docker/prowlarr:/config
     deploy:
       resources:
         reservations:
@@ -39,9 +39,9 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/lidarr:/config
-      - /downloads:/downloads
-      - /music:/music
+      - /mnt/docker/lidarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/music:/music
     deploy:
       resources:
         reservations:
@@ -65,9 +65,9 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/radarr:/config
-      - /downloads:/downloads
-      - /movies:/movies
+      - /mnt/docker/radarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/movies:/movies
     deploy:
       resources:
         reservations:
@@ -91,8 +91,8 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/sabnzbd:/config
-      - /downloads:/downloads
+      - /mnt/docker/sabnzbd:/config
+      - /mnt/downloads:/downloads
     deploy:
       resources:
         reservations:
@@ -116,9 +116,9 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/sonarr:/config
-      - /downloads:/downloads
-      - /tv:/tv
+      - /mnt/docker/sonarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/tv:/tv
     deploy:
       resources:
         reservations:
@@ -144,8 +144,8 @@ services:
       - PGID=1000
       - TZ=America/Toronto
     volumes:
-      - /docker/transmission:/config
-      - /downloads:/downloads
+      - /mnt/docker/transmission:/config
+      - /mnt/downloads:/downloads
     deploy:
       resources:
         reservations:
