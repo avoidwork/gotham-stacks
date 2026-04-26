@@ -169,4 +169,3 @@ services:
 
 networks:
   stacks-net:
-    external: true
