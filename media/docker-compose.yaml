@@ -1,0 +1,156 @@
+version: "3.8"
+
+services:
+  # --------------------------------------------------------------
+  # Prowlarr
+  # --------------------------------------------------------------
+  prowlarr:
+    image: linuxserver/prowlarr:nightly-version-2.3.6.5351
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/prowlarr:/config
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "0.25"
+          memory: 512M
+
+  # --------------------------------------------------------------
+  # Lidarr
+  # --------------------------------------------------------------
+  lidarr:
+    image: linuxserver/lidarr:nightly-version-3.1.2.4939
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/lidarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/music:/music
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "2"
+          memory: 4G
+
+  # --------------------------------------------------------------
+  # Radarr
+  # --------------------------------------------------------------
+  radarr:
+    image: linuxserver/radarr:nightly-version-6.1.2.10361
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/radarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/movies:/movies
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "2"
+          memory: 4G
+
+  # --------------------------------------------------------------
+  # Sabnzbd
+  # --------------------------------------------------------------
+  sabnzbd:
+    image: linuxserver/sabnzbd:4.5.5
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/sabnzbd:/config
+      - /mnt/downloads:/downloads
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "4"
+          memory: 4G
+
+  # --------------------------------------------------------------
+  # Sonarr
+  # --------------------------------------------------------------
+  sonarr:
+    image: linuxserver/sonarr:4.0.17
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/sonarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/tv:/tv
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "2"
+          memory: 4G
+
+  # --------------------------------------------------------------
+  # Transmission
+  # --------------------------------------------------------------
+  transmission:
+    image: linuxserver/transmission:4.1.1
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+      - "51413:51413/tcp"
+      - "51413:51413/udp"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/transmission:/config
+      - /mnt/downloads:/downloads
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "1"
+          memory: 1G
