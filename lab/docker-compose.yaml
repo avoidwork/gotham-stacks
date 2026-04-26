@@ -387,7 +387,8 @@ services:
     image: ghcr.io/openclaw/openclaw:2026.4.22
     pull_policy: if_not_present
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - gotham-net
     environment:
       - PUID=1000
       - PGID=1000
@@ -395,10 +396,10 @@ services:
       - OPENCLAW_GATEWAY_BIND=lan
       - OPENAI_BASE_URL=http://10.1.2.60:8000/v1
       - OPENAI_API_KEY=local
-      - SEARXNG_BASE_URL=http://10.1.2.50:31081
-      - LIDARR_BASE_URL=http://10.1.2.50:30686
-      - RADARR_BASE_URL=http://10.1.2.50:30778
-      - SONARR_BASE_URL=http://10.1.2.50:30898
+      - SEARXNG_BASE_URL=http://searxng:8080
+      - LIDARR_BASE_URL=http://lidarr:8686
+      - RADARR_BASE_URL=http://radarr:7878
+      - SONARR_BASE_URL=http://sonarr:8989
       - OPENCODE_HOST=10.1.2.8
       - ZOHO_EMAIL=${ZOHO_EMAIL}
       - ZOHO_PASSWORD=${ZOHO_PASSWORD}
@@ -421,3 +422,7 @@ services:
         limits:
           cpus: "2"
           memory: 4G
+
+networks:
+  gotham-net:
+    driver: bridge
