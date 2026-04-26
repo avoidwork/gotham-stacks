@@ -16,8 +16,10 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_NPM_PASSWORD=${MYSQL_NPM_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
+      - ./init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     deploy:
       resources:
         reservations:
