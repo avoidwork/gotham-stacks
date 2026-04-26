@@ -17,7 +17,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - /mnt/docker/mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     deploy:
       resources:
         reservations:
@@ -44,7 +44,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - /mnt/docker/mongodb:/data/db
+      - mongodb-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -424,6 +424,8 @@ services:
           memory: 4G
 
 volumes:
+  mysql-data:
+  mongodb-data:
   npm-data:
   npm-letsencrypt:
 
