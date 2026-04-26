@@ -20,6 +20,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf:ro
     deploy:
       resources:
         reservations:
