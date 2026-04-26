@@ -16,6 +16,8 @@ services:
       - TZ=America/Toronto
     volumes:
       - /mnt/docker/prowlarr:/config
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -42,6 +44,8 @@ services:
       - /mnt/docker/lidarr:/config
       - /mnt/downloads:/downloads
       - /mnt/music:/music
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -68,6 +72,8 @@ services:
       - /mnt/docker/radarr:/config
       - /mnt/downloads:/downloads
       - /mnt/movies:/movies
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -93,6 +99,8 @@ services:
     volumes:
       - /mnt/docker/sabnzbd:/config
       - /mnt/downloads:/downloads
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -119,6 +127,8 @@ services:
       - /mnt/docker/sonarr:/config
       - /mnt/downloads:/downloads
       - /mnt/tv:/tv
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -146,6 +156,8 @@ services:
     volumes:
       - /mnt/docker/transmission:/config
       - /mnt/downloads:/downloads
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -154,3 +166,7 @@ services:
         limits:
           cpus: "1"
           memory: 1G
+
+networks:
+  stacks-net:
+    external: true
