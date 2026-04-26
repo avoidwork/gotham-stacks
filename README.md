@@ -128,23 +128,67 @@ Media management and downloading tools.
 
 ---
 
-## Media Stack: Docker Compose alternative
+## Docker Compose stacks
 
-If you don't want to run the media stack on Kubernetes, there's a `docker-compose.yaml` file at `media/docker-compose.yaml` that runs the same apps (Prowlarr, Lidarr, Radarr, Sonarr, Sabnzbd, Transmission) without Kubernetes.
+This repo includes Docker Compose equivalents of the Kubernetes stacks, useful if you don't have a Kubernetes cluster.
 
-**Prerequisites:** The NFS share must be mounted on the Docker host (e.g. `10.1.2.5:/docker /mnt/docker nfs`).
+The Docker Compose stacks use a **shared network** (`gotham-net`) between `lab` and `media` so that OpenClaw can reach SearXNG, Lidarr, Radarr, and Sonarr by their container hostnames. Both stacks must be running on the same Docker host.
 
-**Commands:**
+### Prerequisites
+
+Both stacks use bind mounts that map to `/mnt/docker/*`. You'll need the NFS share mounted on the Docker host (e.g. `10.1.2.5:/docker /mnt/docker nfs`).
+
+### Lab stack
+
+A general-purpose lab environment (same apps as `lab.yaml` but without Kubernetes).
+
+```shell
+cd lab
+docker compose up -d
+```
+
+Stops the lab stack:
+
+```shell
+cd lab
+docker compose down
+```
+
+### Media stack
+
+Media management and downloading tools (same apps as `media.yaml` but without Kubernetes).
 
 ```shell
 cd media
 docker compose up -d
+```
+
+Stops the media stack:
+
+```shell
+cd media
 docker compose down
 ```
 
-Apps use the same ports as the Kubernetes manifests, exposed directly on `http://<host-ip>:<port>`.
+### Loading both stacks (shared network)
 
-Volume paths use `/mnt/*` instead of NFS-backed PVCs. See the volume paths in `media/docker-compose.yaml` for details.
+You can bring up either stack independently. The shared `gotham-net` network is created automatically when the first service joins it. For clarity:
+
+```shell
+# Bring up lab (creates gotham-net)
+cd lab && docker compose up -d
+
+# Bring up media (joins existing gotham-net)
+cd ../media && docker compose up -d
+```
+
+Or the other way around — order doesn't matter since Docker creates the network on first use.
+
+### Accessing apps
+
+All apps are exposed directly on the host at `http://<host-ip>:<port>`. Run `docker compose ps` to see the port mappings for each service.
+
+Volume paths use `/mnt/*` instead of NFS-backed PVCs. See each `docker-compose.yaml` for details.
 
 ---
 
