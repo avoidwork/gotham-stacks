@@ -430,6 +430,7 @@ services:
 
 networks:
   stacks-net:
+    external: true
 
 volumes:
   mysql-data:
