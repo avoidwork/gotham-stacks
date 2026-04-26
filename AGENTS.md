@@ -10,9 +10,12 @@ This repository contains prebuilt Kubernetes "stack" manifests for a homelab env
   - Namespace: `lab-stack`
   - Apps: MySQL, Redis, MongoDB, nginx, SearXNG, Open WebUI, n8n, TeamCity, Nginx Proxy Manager, Grafana, InfluxDB, Prometheus, Pi-hole exporters, OpenClaw (AI agent gateway for WhatsApp, Telegram, Discord, iMessage)
 
-- **`media.yaml`** — Media stack (media management and downloading)
+- **`media.yaml`** — Media stack (Kubernetes)
   - Namespace: `media-stack`
   - Apps: Prowlarr, Lidarr, Radarr, Sonarr, Sabnzbd, Transmission
+- **`docker-compose.yaml`** — Media stack (Docker Compose alternative)
+  - File: `media/docker-compose.yaml`
+  - Apps: Same as media.yaml, using bind mounts instead of NFS volumes
 
 ## Key Environmental Dependencies
 
@@ -42,6 +45,20 @@ kubectl -n lab-stack create secret generic arc --from-literal=ARC_DB_PASSWORD="<
 - `nfs` — Used for PVCs with ReadWriteMany access
 
 Ensure these StorageClasses exist in your cluster before applying.
+
+### Docker Compose (Media Stack Only)
+For media-stack only, there is a Docker Compose alternative that uses bind mounts instead of direct NFS mounts.
+
+**Prerequisites:** The NFS share must be mounted on the Docker host (e.g., `10.1.2.5:/docker /docker nfs`).
+
+**Commands:**
+```bash
+cd media
+docker compose up -d      # Start all services
+docker compose down       # Stop and remove
+```
+
+Apps are accessible at `http://<host-ip>:<port>` — each service maps directly to its container port.
 
 ## Common Operations
 
