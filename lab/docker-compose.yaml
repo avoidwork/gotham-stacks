@@ -279,7 +279,7 @@ services:
       - TZ=America/Toronto
       - GF_PLUGINS_PREINSTALL=grafana-clock-panel,grafana-simple-json-datasource
     volumes:
-      - /mnt/docker/grafana:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     deploy:
       resources:
         reservations:
@@ -433,4 +433,5 @@ volumes:
   mongodb-data:
   npm-data:
   npm-letsencrypt:
+  grafana-data:
 
