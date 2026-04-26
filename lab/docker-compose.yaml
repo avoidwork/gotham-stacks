@@ -417,6 +417,8 @@ services:
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN}
     volumes:
       - /mnt/docker/openclaw:/home/node/.openclaw
+    networks:
+      - stacks-net
     deploy:
       resources:
         reservations:
@@ -425,6 +427,9 @@ services:
         limits:
           cpus: "2"
           memory: 4G
+
+networks:
+  stacks-net:
 
 volumes:
   mysql-data:
