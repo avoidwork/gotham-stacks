@@ -48,6 +48,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb-data:/data/db
+      - mongodb-configdb:/data/configdb
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -431,6 +432,7 @@ services:
 volumes:
   mysql-data:
   mongodb-data:
+  mongodb-configdb:
   npm-data:
   npm-letsencrypt:
   grafana-data:
