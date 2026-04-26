@@ -21,8 +21,6 @@ services:
       - mysql-data:/var/lib/mysql
       - ./init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf:ro
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -50,8 +48,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodb-data:/data/db
-    networks:
-      - stacks-net
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -77,8 +73,6 @@ services:
       - "6379:6379"
     volumes:
       - /mnt/docker/redis:/data
-    networks:
-      - stacks-net
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -111,8 +105,6 @@ services:
     volumes:
       - /mnt/docker/nginx/conf.d:/etc/nginx/conf.d
       - /mnt/docker/nginx/wwwroot:/usr/share/nginx
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -143,8 +135,6 @@ services:
     volumes:
       - /mnt/docker/searxng/config:/etc/searxng
       - /mnt/docker/searxng/data:/var/cache/searxng
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -163,8 +153,6 @@ services:
     restart: unless-stopped
     ports:
       - "8082:8080"
-    networks:
-      - stacks-net
     environment:
       - PUID=1000
       - PGID=1000
@@ -191,8 +179,6 @@ services:
     ports:
       - "5678:5678"
     user: "0:0"
-    networks:
-      - stacks-net
     environment:
       - NODES_EXCLUDE=[]
       - N8N_RESTRICT_FILE_ACCESS_TO=/mnt/translate
@@ -231,8 +217,6 @@ services:
       - /mnt/docker/teamcity/logs:/opt/teamcity/logs
       - /mnt/docker/teamcity/temp:/opt/teamcity/temp
       - /mnt/docker/teamcity/data:/data/teamcity_server/datadir
-    networks:
-      - stacks-net
     depends_on:
       - mysql
     deploy:
@@ -265,8 +249,6 @@ services:
     volumes:
       - npm-data:/data
       - npm-letsencrypt:/etc/letsencrypt
-    networks:
-      - stacks-net
     depends_on:
       - mysql
     deploy:
@@ -298,8 +280,6 @@ services:
       - GF_PLUGINS_PREINSTALL=grafana-clock-panel,grafana-simple-json-datasource
     volumes:
       - /mnt/docker/grafana:/var/lib/grafana
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -327,8 +307,6 @@ services:
     volumes:
       - /mnt/docker/influxdb/config:/etc/influxdb2
       - /mnt/docker/influxdb/data:/var/lib/influxdb2
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -354,8 +332,6 @@ services:
     volumes:
       - /mnt/docker/prometheus/config:/etc/prometheus
       - /mnt/docker/prometheus/data:/prometheus
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -379,8 +355,6 @@ services:
     environment:
       - PIHOLE_HOSTNAME=10.1.2.2
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -400,8 +374,6 @@ services:
     environment:
       - PIHOLE_HOSTNAME=10.1.2.3
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -447,8 +419,6 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - /mnt/docker/openclaw:/home/node/.openclaw
-    networks:
-      - stacks-net
     deploy:
       resources:
         reservations:
@@ -457,9 +427,6 @@ services:
         limits:
           cpus: "4"
           memory: 8G
-
-networks:
-  stacks-net:
 
 volumes:
   mysql-data:
