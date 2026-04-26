@@ -418,7 +418,8 @@ services:
     volumes:
       - /mnt/docker/openclaw:/home/node/.openclaw
     networks:
-      - stacks-net
+      stacks-net:
+        external: true
     deploy:
       resources:
         reservations:
@@ -427,10 +428,6 @@ services:
         limits:
           cpus: "2"
           memory: 4G
-
-networks:
-  stacks-net:
-    external: true
 
 volumes:
   mysql-data:
