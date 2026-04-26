@@ -243,8 +243,8 @@ services:
       - DB_MYSQL_PASSWORD=${MYSQL_NPM_PASSWORD}
       - DB_MYSQL_NAME=npm
     volumes:
-      - /mnt/docker/npm/data:/data
-      - /mnt/docker/npm/letsencrypt:/etc/letsencrypt
+      - npm-data:/data
+      - npm-letsencrypt:/etc/letsencrypt
     depends_on:
       - mysql
     deploy:
@@ -422,6 +422,10 @@ services:
         limits:
           cpus: "2"
           memory: 4G
+
+volumes:
+  npm-data:
+  npm-letsencrypt:
 
 networks:
   gotham-net:
