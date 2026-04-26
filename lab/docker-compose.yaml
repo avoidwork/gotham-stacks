@@ -415,6 +415,8 @@ services:
       - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
       - TMDB_API_KEY=${TMDB_API_KEY}
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - /mnt/docker/openclaw:/home/node/.openclaw
     networks:
