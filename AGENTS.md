@@ -22,7 +22,7 @@ This repository contains prebuilt Kubernetes "stack" manifests for a homelab env
 ### NFS Server (Critical)
 The manifests are configured for a specific NFS server:
 - **Server IP:** `10.1.2.5`
-- **Paths:** Various `/docker/*` and media paths
+- **Paths:** Various `/mnt/docker/*` and media paths
 
 **When working on forks/clones:** Update `server: 10.1.2.5` to match your NFS/NAS server, or switch to PVCs backed by your own StorageClass.
 
@@ -49,7 +49,7 @@ Ensure these StorageClasses exist in your cluster before applying.
 ### Docker Compose (Media Stack Only)
 For media-stack only, there is a Docker Compose alternative that uses bind mounts instead of direct NFS mounts.
 
-**Prerequisites:** The NFS share must be mounted on the Docker host (e.g., `10.1.2.5:/docker /docker nfs`).
+**Prerequisites:** The NFS share must be mounted on the Docker host (e.g., `10.1.2.5:/docker /mnt/docker nfs`).
 
 **Commands:**
 ```bash

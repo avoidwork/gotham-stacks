@@ -128,6 +128,26 @@ Media management and downloading tools.
 
 ---
 
+## Media Stack: Docker Compose alternative
+
+If you don't want to run the media stack on Kubernetes, there's a `docker-compose.yaml` file at `media/docker-compose.yaml` that runs the same apps (Prowlarr, Lidarr, Radarr, Sonarr, Sabnzbd, Transmission) without Kubernetes.
+
+**Prerequisites:** The NFS share must be mounted on the Docker host (e.g. `10.1.2.5:/docker /mnt/docker nfs`).
+
+**Commands:**
+
+```shell
+cd media
+docker compose up -d
+docker compose down
+```
+
+Apps use the same ports as the Kubernetes manifests, exposed directly on `http://<host-ip>:<port>`.
+
+Volume paths use `/mnt/*` instead of NFS-backed PVCs. See the volume paths in `media/docker-compose.yaml` for details.
+
+---
+
 ## Customization tips
 
 - **NodePort:** great for homelabs; access apps via `http://<node-ip>:<nodePort>`.
