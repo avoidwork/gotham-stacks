@@ -391,8 +391,7 @@ services:
     image: ghcr.io/openclaw/openclaw:2026.4.22
     pull_policy: if_not_present
     restart: unless-stopped
-    ports:
-      - "18789:18789"
+    network_mode: host
     environment:
       - PUID=1000
       - PGID=1000
@@ -400,7 +399,7 @@ services:
       - OPENCLAW_GATEWAY_BIND=lan
       - OPENAI_BASE_URL=http://10.1.2.60:8000/v1
       - OPENAI_API_KEY=local
-      - SEARXNG_BASE_URL=http://searxng:8080
+      - SEARXNG_BASE_URL=http://10.1.2.20:8081
       - LIDARR_BASE_URL=http://10.1.2.20:8686
       - RADARR_BASE_URL=http://10.1.2.20:7878
       - SONARR_BASE_URL=http://10.1.2.20:8989
