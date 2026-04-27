@@ -401,9 +401,9 @@ services:
       - OPENAI_BASE_URL=http://10.1.2.60:8000/v1
       - OPENAI_API_KEY=local
       - SEARXNG_BASE_URL=http://searxng:8080
-      - LIDARR_BASE_URL=http://host.docker.internal:8686
-      - RADARR_BASE_URL=http://host.docker.internal:7878
-      - SONARR_BASE_URL=http://host.docker.internal:8989
+      - LIDARR_BASE_URL=http://10.1.2.20:8686
+      - RADARR_BASE_URL=http://10.1.2.20:7878
+      - SONARR_BASE_URL=http://10.1.2.20:8989
       - OPENCODE_HOST=10.1.2.8
       - ZOHO_EMAIL=${ZOHO_EMAIL}
       - ZOHO_PASSWORD=${ZOHO_PASSWORD}
@@ -416,8 +416,6 @@ services:
       - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
       - TMDB_API_KEY=${TMDB_API_KEY}
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - /mnt/docker/openclaw:/home/node/.openclaw
     deploy:
