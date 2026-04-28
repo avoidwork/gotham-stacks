@@ -55,7 +55,7 @@ services:
   # Radarr
   # --------------------------------------------------------------
   radarr:
-    image: linuxserver/radarr:nightly-version-6.1.2.10361
+    image: linuxserver/radarr:6.1.1
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
