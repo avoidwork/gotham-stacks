@@ -388,7 +388,7 @@ services:
   # OpenClaw
   # --------------------------------------------------------------
   openclaw:
-    image: ghcr.io/openclaw/openclaw:2026.4.22
+    image: ghcr.io/openclaw/openclaw:2026.4.26
     pull_policy: if_not_present
     restart: unless-stopped
     network_mode: host
