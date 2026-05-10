@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  lidarr:
+    image: linuxserver/lidarr:3.1.0
+    pull_policy: if_not_present
+    restart: unless-stopped
+    ports:
+      - "8686:8686"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - /mnt/docker/lidarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/music:/music
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.1"
+          memory: 256M
+        limits:
+          cpus: "2"
+          memory: 4G
