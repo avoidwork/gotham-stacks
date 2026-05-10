@@ -20,8 +20,8 @@ These manifests are intended to be applied **as-is first**, then customized to m
 Apply a stack:
 
 ```shell
-kubectl apply -f lab.yaml
-kubectl apply -f media.yaml
+kubectl apply -f k8s/lab.yaml
+kubectl apply -f k8s/media.yaml
 ```
 
 Check that resources came up:
@@ -35,8 +35,8 @@ kubectl -n media-stack get all
 Remove a stack:
 
 ```shell
-kubectl delete -f lab.yaml
-kubectl delete -f media.yaml
+kubectl delete -f k8s/lab.yaml
+kubectl delete -f k8s/media.yaml
 ```
 
 ---
@@ -143,14 +143,14 @@ Both stacks use bind mounts that map to `/mnt/docker/*`. You'll need the NFS sha
 A general-purpose lab environment (same apps as `lab.yaml` but without Kubernetes).
 
 ```shell
-cd lab
+cd docker/lab
 docker compose up -d
 ```
 
 Stops the lab stack:
 
 ```shell
-cd lab
+cd docker/lab
 docker compose down
 ```
 
@@ -159,14 +159,14 @@ docker compose down
 Media management and downloading tools (same apps as `media.yaml` but without Kubernetes).
 
 ```shell
-cd media
+cd docker/media
 docker compose up -d
 ```
 
 Stops the media stack:
 
 ```shell
-cd media
+cd docker/media
 docker compose down
 ```
 
@@ -176,7 +176,7 @@ You can bring up either stack independently. The shared `gotham-net` network is 
 
 ```shell
 # Bring up lab (creates gotham-net)
-cd lab && docker compose up -d
+cd docker/lab && docker compose up -d
 
 # Bring up media (joins existing gotham-net)
 cd ../media && docker compose up -d
