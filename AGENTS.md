@@ -46,9 +46,16 @@ The following are **strictly prohibited**:
 ### 2.0 Expected Project Layout
 
 ```
-lab.yaml          — Lab stack (databases, platform tools, monitoring, utilities)
-media.yaml        — Media stack (Kubernetes)
-docker-compose.yaml — Media stack (Docker Compose alternative), file: media/docker-compose.yaml
+k8s/
+  lab.yaml          — Lab stack (databases, platform tools, monitoring, utilities)
+  media.yaml        — Media stack
+  docker/
+    lab/              — Lab stack (Docker Compose)
+      docker-compose.yaml
+      init.sh
+      mysqld.cnf
+    media/
+      docker-compose.yaml — Media stack (Docker Compose alternative)
 AGENTS.md         — This file
 ```
 
@@ -56,11 +63,11 @@ AGENTS.md         — This file
 
 | Command                   | Purpose |
 |---------------------------|---------|
-| `kubectl apply -f lab.yaml` | Apply lab stack |
-| `kubectl apply -f media.yaml` | Apply media stack |
-| `kubectl delete -f lab.yaml` | Remove lab stack |
-| `kubectl delete -f media.yaml` | Remove media stack |
-| `cd media && docker compose up -d` | Start media stack (Docker Compose) |
+| `kubectl apply -f k8s/lab.yaml` | Apply lab stack |
+| `kubectl apply -f k8s/media.yaml` | Apply media stack |
+| `kubectl delete -f k8s/lab.yaml` | Remove lab stack |
+| `kubectl delete -f k8s/media.yaml` | Remove media stack |
+| `cd docker/media && docker compose up -d` | Start media stack (Docker Compose) |
 | `kubectl -n lab-stack get svc` | List lab stack services |
 | `kubectl -n media-stack get svc` | List media stack services |
 
@@ -96,7 +103,7 @@ kubectl -n lab-stack create secret generic arc --from-literal=ARC_DB_PASSWORD="<
 
 Ensure these StorageClasses exist in your cluster before applying.
 
-### 3.4 Docker Compose (Media Stack Only)
+### 3.4 Docker Compose
 
 For media-stack only, there is a Docker Compose alternative that uses bind mounts instead of direct NFS mounts.
 
@@ -105,7 +112,7 @@ For media-stack only, there is a Docker Compose alternative that uses bind mount
 **Commands:**
 
 ```bash
-cd media
+cd docker/media
 docker compose up -d      # Start all services
 docker compose down       # Stop and remove
 ```
