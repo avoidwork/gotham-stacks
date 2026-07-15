@@ -385,48 +385,6 @@ services:
           cpus: "0.25"
           memory: 256M
 
-  # --------------------------------------------------------------
-  # OpenClaw
-  # --------------------------------------------------------------
-  openclaw:
-    image: ghcr.io/openclaw/openclaw:2026.4.29
-    pull_policy: if_not_present
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
-      - OPENCLAW_GATEWAY_BIND=lan
-      - OPENAI_BASE_URL=http://10.1.2.60:8000/v1
-      - OPENAI_API_KEY=local
-      - SEARXNG_BASE_URL=http://10.1.2.20:8081
-      - LIDARR_BASE_URL=http://lidarr.lan:8686/
-      - RADARR_BASE_URL=http://radarr.lan:7878/
-      - SONARR_BASE_URL=http://sonarr.lan:8989/
-      - OPENCODE_HOST=10.1.2.8
-      - ZOHO_EMAIL=${ZOHO_EMAIL}
-      - ZOHO_PASSWORD=${ZOHO_PASSWORD}
-      - OPENCLAW_GATEWAY_TOKEN=${OPENCLAW_GATEWAY_TOKEN}
-      - LIDARR_API_KEY=${LIDARR_API_KEY}
-      - RADARR_API_KEY=${RADARR_API_KEY}
-      - SONARR_API_KEY=${SONARR_API_KEY}
-      - NZBPLANET_API_KEY=${NZBPLANET_API_KEY}
-      - OPENCODE_USERNAME=${OPENCODE_USERNAME}
-      - OPENCODE_PASSWORD=${OPENCODE_PASSWORD}
-      - TMDB_API_KEY=${TMDB_API_KEY}
-      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN}
-    volumes:
-      - /mnt/docker/openclaw:/home/node/.openclaw
-    deploy:
-      resources:
-        reservations:
-          cpus: "0.5"
-          memory: 4G
-        limits:
-          cpus: "4"
-          memory: 8G
-
 volumes:
   mysql-data:
   mongodb-data:
