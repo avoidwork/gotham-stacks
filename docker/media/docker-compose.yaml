@@ -5,7 +5,7 @@ services:
   # Prowlarr
   # --------------------------------------------------------------
   prowlarr:
-    image: linuxserver/prowlarr:2.3.5
+    image: linuxserver/prowlarr:2.5.2
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -39,7 +39,7 @@ services:
   # Radarr
   # --------------------------------------------------------------
   radarr:
-    image: linuxserver/radarr:6.1.1
+    image: linuxserver/radarr:6.3.0
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -57,7 +57,7 @@ services:
   # Sabnzbd
   # --------------------------------------------------------------
   sabnzbd:
-    image: linuxserver/sabnzbd:4.5.5
+    image: linuxserver/sabnzbd:5.0.4
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -74,7 +74,7 @@ services:
   # Sonarr
   # --------------------------------------------------------------
   sonarr:
-    image: linuxserver/sonarr:4.0.17
+    image: linuxserver/sonarr:4.0.19
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
