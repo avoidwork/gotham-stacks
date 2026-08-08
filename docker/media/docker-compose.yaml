@@ -5,7 +5,7 @@ services:
   # Prowlarr
   # --------------------------------------------------------------
   prowlarr:
-    image: linuxserver/prowlarr:2.3.5
+    image: linuxserver/prowlarr:2.5.2
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -16,14 +16,6 @@ services:
       - TZ=America/Toronto
     volumes:
       - /mnt/docker/prowlarr:/config
-    deploy:
-      resources:
-        reservations:
-          cpus: "0.1"
-          memory: 256M
-        limits:
-          cpus: "0.25"
-          memory: 512M
 
   # --------------------------------------------------------------
   # Lidarr
@@ -42,20 +34,12 @@ services:
       - /mnt/docker/lidarr:/config
       - /mnt/downloads:/downloads
       - /mnt/music:/music
-    deploy:
-      resources:
-        reservations:
-          cpus: "0.1"
-          memory: 256M
-        limits:
-          cpus: "2"
-          memory: 4G
 
   # --------------------------------------------------------------
   # Radarr
   # --------------------------------------------------------------
   radarr:
-    image: linuxserver/radarr:6.1.1
+    image: linuxserver/radarr:6.3.0
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -68,20 +52,12 @@ services:
       - /mnt/docker/radarr:/config
       - /mnt/downloads:/downloads
       - /mnt/movies:/movies
-    deploy:
-      resources:
-        reservations:
-          cpus: "0.1"
-          memory: 256M
-        limits:
-          cpus: "2"
-          memory: 4G
 
   # --------------------------------------------------------------
   # Sabnzbd
   # --------------------------------------------------------------
   sabnzbd:
-    image: linuxserver/sabnzbd:4.5.5
+    image: linuxserver/sabnzbd:5.0.4
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -93,20 +69,12 @@ services:
     volumes:
       - /mnt/docker/sabnzbd:/config
       - /mnt/downloads:/downloads
-    deploy:
-      resources:
-        reservations:
-          cpus: "0.1"
-          memory: 256M
-        limits:
-          cpus: "4"
-          memory: 4G
 
   # --------------------------------------------------------------
   # Sonarr
   # --------------------------------------------------------------
   sonarr:
-    image: linuxserver/sonarr:4.0.17
+    image: linuxserver/sonarr:4.0.19
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -132,7 +100,7 @@ services:
   # Transmission
   # --------------------------------------------------------------
   transmission:
-    image: linuxserver/transmission:4.1.1
+    image: linuxserver/transmission:4.1.3
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
