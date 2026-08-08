@@ -392,5 +392,3 @@ volumes:
   npm-data:
   npm-letsencrypt:
   grafana-data:
-a:
-
