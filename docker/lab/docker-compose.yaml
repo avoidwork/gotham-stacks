@@ -322,7 +322,7 @@ services:
   # Prometheus
   # --------------------------------------------------------------
   prometheus:
-    image: prom/prometheus:v3.11.2
+    image: prom/prometheus:v3.13.2
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
