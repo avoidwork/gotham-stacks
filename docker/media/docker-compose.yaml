@@ -5,7 +5,7 @@ services:
   # Prowlarr
   # --------------------------------------------------------------
   prowlarr:
-    image: linuxserver/prowlarr:2.5.2
+    image: linuxserver/prowlarr:3.1.0
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -21,7 +21,7 @@ services:
   # Lidarr
   # --------------------------------------------------------------
   lidarr:
-    image: linuxserver/lidarr:3.1.0
+    image: linuxserver/lidarr:3.1.6
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -39,7 +39,7 @@ services:
   # Radarr
   # --------------------------------------------------------------
   radarr:
-    image: linuxserver/radarr:6.3.0
+    image: linuxserver/radarr:7.0.3
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -57,7 +57,7 @@ services:
   # Sabnzbd
   # --------------------------------------------------------------
   sabnzbd:
-    image: linuxserver/sabnzbd:5.0.4
+    image: linuxserver/sabnzbd:5.1.3
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -74,7 +74,7 @@ services:
   # Sonarr
   # --------------------------------------------------------------
   sonarr:
-    image: linuxserver/sonarr:4.0.19
+    image: linuxserver/sonarr:4.0.20
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
@@ -100,7 +100,7 @@ services:
   # Transmission
   # --------------------------------------------------------------
   transmission:
-    image: linuxserver/transmission:4.1.3
+    image: linuxserver/transmission:4.1.4
     pull_policy: if_not_present
     restart: unless-stopped
     ports:
